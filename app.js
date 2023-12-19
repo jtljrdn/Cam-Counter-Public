@@ -1,4 +1,3 @@
-
 const fs = require("node:fs");
 const path = require("node:path");
 const {
@@ -11,7 +10,7 @@ const {
 const { Count, sequelize } = require("./handleDb");
 const deploy = require("./deploy-commands");
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
-deploy()
+deploy();
 require("dotenv").config();
 
 client.once(Events.ClientReady, (c) => {

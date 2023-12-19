@@ -12,7 +12,9 @@ module.exports = {
       await interaction.reply(`Current Count: ${countRecord.get("value")}`);
     } catch (error) {
       console.log(error);
-      await interaction.reply(`Error getting count. Contact <@119662538781753344> for help.`);
+      await interaction.reply(
+        `Error getting count. Contact <@119662538781753344> for help.`
+      );
     }
   },
 };
