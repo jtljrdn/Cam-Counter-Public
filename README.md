@@ -11,7 +11,7 @@ Can be modified to support different counts/additional features.
 * Discord.js
 * Sequelize + SQLite3
 * Internally stored DB
-* Hosted with [Bot-Hosting.net](bot-hosting.net)
+* Hosted with [Bot-Hosting.net](https://bot-hosting.net)
 
 ## Installation/Usage
 
