@@ -49,3 +49,5 @@ npm start
 If you want to contribute a feature or bug fix you found, fork the repo and send a PR!
 
 If you find a bug or want a new feature, report it under issues.
+
+If you need any help getting it setup, reach out to me on discord @.bung or on twitter @jtljrdn!
