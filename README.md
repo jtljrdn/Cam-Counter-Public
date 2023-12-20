@@ -37,7 +37,7 @@ npm install
 
 8. Take generated URL and paste into your browser to create the bot invite. Add to your desired server
 
-9. Fill in rename your local `.env.template` file to `.env` and fill in environment variables
+9. Rename your local `.env.template` file to `.env` and fill in environment variables
 
 10. Run 
 ```sh
