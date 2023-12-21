@@ -2,9 +2,7 @@
 
 Silly Discord bot to provide a count for how many times my friend Cameron doesn't join Discord VC when he said he would.
 
-Can be modified for your own server/friend group!
-
-Can be modified to support different counts/additional features.
+Mainly using this as a way to test features for Discord bots. Will most likely just become a general purpose/utility bot. 
 
 ## Details/Stack
 
@@ -43,6 +41,14 @@ npm install
 ```sh
 npm start
 ```
+
+## TODO
+
+* Change DB system to MongoDB
+* Add multiple count support via ID setting
+* Add commands to set the current count ID (Allowing for multiple counts)
+* Passwords on counts? (Or some other way to make server-specific)
+* Change real-time count preview from the status to a locked voice-channel.
 
 ## Contributions
 
