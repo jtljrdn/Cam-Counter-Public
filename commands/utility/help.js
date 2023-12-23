@@ -1,21 +1,37 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { pages } = require("../../lib/help");
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("help")
-    .setDescription("List of Info/Commands"),
+    .setDescription("List of Info/Commands")
+    .addStringOption((option) =>
+      option
+        .setName("page")
+        .setDescription("Page Number (1-3)")
+        .setRequired(false)
+    ),
   async execute(interaction) {
-    const helpEmbed = new EmbedBuilder()
-      .setColor("#0099ff")
-      .setTitle("Help")
-      .setDescription("**Useful Links**\n[GitHub](https://github.com/jtljrdn/cam-counter-public)\n[Community Discord](https://discord.gg/bDwKqSreue)")
-      .addFields(
-        { name: "**Commands**", value: "\n"},
-        { name: "/add", value: "Add to the count" },
-        { name: "/get", value: "Get the current count" },
-        { name: "/set", value: "**Admin** Set the current count" },
-        { name: "/reset", value: "**Admin** Set the current count to zero" },
+    const page = interaction.options.getString("page");
+    try {
+      switch (page) {
+        case "1":
+          await interaction.reply({ embeds: [pages[0]] });
+          break;
+        case "2":
+          await interaction.reply({ embeds: [pages[1]] });
+          break;
+        // case "3":
+        //   await interaction.reply({ embeds: [pages[2]] });
+        //   break;
+        default:
+          interaction.reply("Please provide a page number (1-2)");
+      }
+    } catch (error) {
+      console.log(error);
+      await interaction.reply(
+        `Error getting help pages. Contact <@119662538781753344> for help.`
       );
-    await interaction.reply({ embeds: [helpEmbed] });
+    }
   },
 };

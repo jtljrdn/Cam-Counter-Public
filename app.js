@@ -7,29 +7,22 @@ const {
   GatewayIntentBits,
   ActivityType,
 } = require("discord.js");
-const { Count, sequelize } = require("./handleDb");
 const deploy = require("./deploy-commands");
+const Server = require("./lib/database/models/servers.model");
+const { connectToDatabase } = require("./lib/database");
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+let currentPage = 0;
 deploy();
 require("dotenv").config();
 
-client.once(Events.ClientReady, (c) => {
-  Count.sync();
+client.once(Events.ClientReady, async (c) => {
+  client.user.setActivity("/help");
   console.log(`Logged in as ${c.user.tag}!`);
-  const setActivity = async () => {
-    const countRecord = await Count.findOne({ where: { id: 1 } });
-    client.user.setActivity(`The Current Count: ${countRecord.get("value")}`, {
-      type: ActivityType.Watching,
-    });
-  };
-  setInterval(() => {
-    setActivity();
-  }, 1000 * 60);
 });
 
 const checkConnection = async () => {
   try {
-    await sequelize.authenticate();
+    await connectToDatabase();
     console.log("Connection has been established successfully.");
   } catch (error) {
     console.error("Unable to connect to the database:", error);
@@ -64,35 +57,69 @@ for (const folder of commandFolders) {
   }
 }
 
+client.on(Events.GuildCreate, async (guild) => {
+  console.log(`Joined ${guild.name}!`);
+  try {
+    await connectToDatabase();
+
+    console.log(await Server.findOne({ guildId: guild.id }));
+
+    if (await Server.findOne({ guildId: guild.id })) {
+      console.log(`Guild ${guild.id} already exists in DB!`);
+    } else {
+      console.log(`New Guild Joined: ${guild.id}. Adding to DB...`);
+      const newGuild = await Server.create({
+        guildId: guild.id,
+        guildName: guild.name,
+      });
+      console.log(JSON.parse(JSON.stringify(newGuild)));
+    }
+    const channel = client.channels.cache.get(guild.systemChannelId);
+    channel.send(
+      "Hi! I'm CamBot, a multipurpose bot for your server! To get started, type `/help` to see a list of commands."
+    );
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 client.on(Events.InteractionCreate, (interaction) => {
   if (!interaction.isChatInputCommand()) return;
   console.log(interaction);
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
-  if (!interaction.isChatInputCommand()) return;
+  if (interaction.isChatInputCommand()) {
+    const command = interaction.client.commands.get(interaction.commandName);
 
-  const command = interaction.client.commands.get(interaction.commandName);
-
-  if (!command) {
-    console.error(`No command matching ${interaction.commandName} was found.`);
-    return;
-  }
-
-  try {
-    await command.execute(interaction);
-  } catch (error) {
-    console.error(error);
-    if (interaction.replied || interaction.deferred) {
-      await interaction.followUp({
-        content: "There was an error while executing this command!",
-        ephemeral: true,
-      });
-    } else {
-      await interaction.reply({
-        content: "There was an error while executing this command!",
-        ephemeral: true,
-      });
+    if (!command) {
+      console.error(
+        `No command matching ${interaction.commandName} was found.`
+      );
+      return;
     }
+
+    try {
+      await command.execute(interaction);
+    } catch (error) {
+      console.error(error);
+      if (interaction.replied || interaction.deferred) {
+        await interaction.followUp({
+          content: "There was an error while executing this command!",
+          ephemeral: true,
+        });
+      } else {
+        await interaction.reply({
+          content: "There was an error while executing this command!",
+          ephemeral: true,
+        });
+      }
+    }
+  } else if (interaction.isButton()) {
+    console.log(interaction);
+    // respond to the button interaction
   }
+  // } else if (interaction.isStringSelectMenu()) {
+  //  // respond to the select menu
+  // }
 });
