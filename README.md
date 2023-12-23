@@ -34,18 +34,20 @@ npm install
 
 8. Take generated URL and paste into your browser to create the bot invite. Add to your desired server
 
-9. Rename your local `.env.template` file to `.env` and fill in environment variables
+9. Go to [MongoDB](https://www.mongodb.com/atlas) and create a free `M0` database. Copy the connection URL with password.
 
-10. Run 
+10. Rename your local `.env.template` file to `.env` and paste in environment variables from Discord and MongoDB
+
+11. Run 
 ```sh
 npm start
 ```
 
 ## TODO
 
-* Change DB system to MongoDB
-* Add multiple count support via ID setting
-* Add commands to set the current count ID (Allowing for multiple counts)
+* ~~Change DB system to MongoDB~~
+* ~~Add multiple count support via ID setting~~
+* ~~Add commands to set the current count ID (Allowing for multiple counts)~~
 * Passwords on counts? (Or some other way to make server-specific)
 * Change real-time count preview from the status to a locked voice-channel.
 
