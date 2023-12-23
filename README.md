@@ -7,8 +7,7 @@ Mainly using this as a way to test features for Discord bots. Will most likely j
 ## Details/Stack
 
 * Discord.js
-* Sequelize + SQLite3
-* Internally stored DB
+* MongoDB
 * Hosted with [Bot-Hosting.net](https://bot-hosting.net)
 
 ## Installation/Usage
