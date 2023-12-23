@@ -16,7 +16,7 @@ deploy();
 require("dotenv").config();
 
 client.once(Events.ClientReady, async (c) => {
-  client.user.setActivity("DEV MODE /help");
+  client.user.setActivity("/help");
   console.log(`Logged in as ${c.user.tag}!`);
 });
 
