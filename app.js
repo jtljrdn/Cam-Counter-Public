@@ -76,7 +76,7 @@ client.on(Events.GuildCreate, async (guild) => {
     }
     const channel = client.channels.cache.get(guild.systemChannelId);
     channel.send(
-      "Hi! I'm CamBot, a multipurpose bot for your server! To get started, type `/help` to see a list of commands."
+      "Hi! I'm CamBot, a multipurpose bot for your server! To get started, type `/help` to see a list of commands.\nJoin the support server at https://discord.gg/bDwKqSreue for help or to suggest new features!"
     );
   } catch (error) {
     console.log(error);

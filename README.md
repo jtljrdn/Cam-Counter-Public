@@ -1,5 +1,7 @@
 # Cam Counter
 
+[Invite](https://discord.com/api/oauth2/authorize?client_id=1186507379173503137&permissions=1494698011670&scope=bot+applications.commands)
+
 Silly Discord bot to provide a count for how many times my friend Cameron doesn't join Discord VC when he said he would.
 
 Mainly using this as a way to test features for Discord bots. Will most likely just become a general purpose/utility bot. 
