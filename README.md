@@ -59,4 +59,4 @@ If you want to contribute a feature or bug fix you found, fork the repo and send
 
 If you find a bug or want a new feature, report it under issues.
 
-If you need any help getting it setup, reach out to me on discord @.bung or on twitter @jtljrdn!
+If you need any help getting it setup, reach out to me on [Discord](https://discord.gg/bDwKqSreue)
