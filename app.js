@@ -17,15 +17,15 @@ require("dotenv").config();
 
 client.once(Events.ClientReady, async (c) => {
   client.user.setActivity("/help");
-  console.log(`Logged in as ${c.user.tag}!`);
+  console.log(`${Date.now()} | Logged in as ${c.user.tag}!`);
 });
 
 const checkConnection = async () => {
   try {
     await connectToDatabase();
-    console.log("Connection has been established successfully.");
+    console.log(`${Date.now()} | Connection has been established successfully.`);
   } catch (error) {
-    console.error("Unable to connect to the database:", error);
+    console.error(`${Date.now()} | Unable to connect to the database: ${error}`);
   }
 };
 
@@ -51,7 +51,7 @@ for (const folder of commandFolders) {
       client.commands.set(command.data.name, command);
     } else {
       console.log(
-        `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
+        `${Date.now()} | [WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
       );
     }
   }
@@ -65,9 +65,9 @@ client.on(Events.GuildCreate, async (guild) => {
     console.log(await Server.findOne({ guildId: guild.id }));
 
     if (await Server.findOne({ guildId: guild.id })) {
-      console.log(`Guild ${guild.id} already exists in DB!`);
+      console.log(`${Date.now()} | Guild ${guild.id} already exists in DB!`);
     } else {
-      console.log(`New Guild Joined: ${guild.id}. Adding to DB...`);
+      console.log(`${Date.now()} | New Guild Joined: ${guild.id}. Adding to DB...`);
       const newGuild = await Server.create({
         guildId: guild.id,
         guildName: guild.name,
@@ -85,7 +85,7 @@ client.on(Events.GuildCreate, async (guild) => {
 
 client.on(Events.InteractionCreate, (interaction) => {
   if (!interaction.isChatInputCommand()) return;
-  console.log(interaction);
+  console.log(`${Date.now()} | ${interaction.user.tag} in ${interaction.guild.name} triggered ${interaction.commandName}.`);
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
@@ -94,7 +94,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
     if (!command) {
       console.error(
-        `No command matching ${interaction.commandName} was found.`
+        `${Date.now()} | No command matching ${interaction.commandName} was found.`
       );
       return;
     }
