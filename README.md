@@ -10,7 +10,7 @@ Mainly using this as a way to test features for Discord bots. Will most likely j
 
 * Discord.js
 * MongoDB
-* Hosted with [Bot-Hosting.net](https://bot-hosting.net)
+* Hosted with [Bot-Hosting.net](https://bot-hosting.net/?aff=119662538781753344)
 
 ## Installation/Usage
 
