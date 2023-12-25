@@ -1,33 +1,50 @@
 const fs = require("node:fs");
 const path = require("node:path");
-const {
-  Client,
-  Collection,
-  Events,
-  GatewayIntentBits,
-} = require("discord.js");
-const { createDjsClient } = require("discordbotlist")
+const { Client, Collection, Events, GatewayIntentBits } = require("discord.js");
+const { createDjsClient } = require("discordbotlist");
 const deploy = require("./deploy-commands");
 const Server = require("./lib/database/models/servers.model");
 const { connectToDatabase } = require("./lib/database");
+const Count = require("./lib/database/models/count.model");
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
-let currentPage = 0;
-deploy();
 require("dotenv").config();
+deploy();
 
 client.once(Events.ClientReady, async (c) => {
   client.user.setActivity("/help");
   console.log(`${Date.now()} | Logged in as ${c.user.tag}!`);
   const dbl = createDjsClient(process.env.DBL_TOKEN, client);
   dbl.startPosting();
+  const updateCountChannel = async () => {
+    try {
+      await connectToDatabase();
+      const servers = await Server.find({countChannel: {$ne: null}});
+      for (const server of servers) {
+        const guild = await client.guilds.fetch(server.guildId);
+        const channel = guild.channels.cache.get(server.countChannel);
+        const count = await Count.findById(server.currentCount);
+        channel.setName(`${count.name}: ${count.value}`)
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  setInterval(async () => {
+    await updateCountChannel();
+  }, 1000 * 5);
 });
 
 const checkConnection = async () => {
   try {
     await connectToDatabase();
-    console.log(`${Date.now()} | Connection has been established successfully.`);
+    console.log(
+      `${Date.now()} | Connection has been established successfully.`
+    );
   } catch (error) {
-    console.error(`${Date.now()} | Unable to connect to the database: ${error}`);
+    console.error(
+      `${Date.now()} | Unable to connect to the database: ${error}`
+    );
   }
 };
 
@@ -69,10 +86,13 @@ client.on(Events.GuildCreate, async (guild) => {
     if (await Server.findOne({ guildId: guild.id })) {
       console.log(`${Date.now()} | Guild ${guild.id} already exists in DB!`);
     } else {
-      console.log(`${Date.now()} | New Guild Joined: ${guild.id}. Adding to DB...`);
+      console.log(
+        `${Date.now()} | New Guild Joined: ${guild.id}. Adding to DB...`
+      );
       const newGuild = await Server.create({
         guildId: guild.id,
         guildName: guild.name,
+        joinedAt: Date.now(),
       });
       console.log(JSON.parse(JSON.stringify(newGuild)));
     }
@@ -87,7 +107,11 @@ client.on(Events.GuildCreate, async (guild) => {
 
 client.on(Events.InteractionCreate, (interaction) => {
   if (!interaction.isChatInputCommand()) return;
-  console.log(`${Date.now()} | ${interaction.user.tag} in ${!interaction.guild ? "DMs" : interaction.guild.name} triggered ${interaction.commandName}.`);
+  console.log(
+    `${Date.now()} | ${interaction.user.tag} in ${
+      !interaction.guild ? "DMs" : interaction.guild.name
+    } triggered ${interaction.commandName}.`
+  );
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
@@ -96,7 +120,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
     if (!command) {
       console.error(
-        `${Date.now()} | No command matching ${interaction.commandName} was found.`
+        `${Date.now()} | No command matching ${
+          interaction.commandName
+        } was found.`
       );
       return;
     }
