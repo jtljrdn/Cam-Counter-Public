@@ -13,7 +13,7 @@ const addCount = async (interaction) => {
     } catch (error) {
         console.log(error);
         await interaction.reply(
-            `Error adding to the count. Join the support server for help: https://discord.gg/bDwKqSreue.`
+            `Error adding to the count. Join the support server for help:\nhttps://discord.gg/bDwKqSreue.`
           );
     }
 }

@@ -23,7 +23,7 @@ const createCount = async (interaction) => {
       } catch (error) {
         console.log(error);
         await interaction.reply(
-          `Error creating count in database. Join the support server for help: https://discord.gg/bDwKqSreue.`
+          `Error creating count in database. Join the support server for help:\nhttps://discord.gg/bDwKqSreue.`
         );
       }
 }

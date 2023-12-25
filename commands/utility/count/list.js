@@ -9,7 +9,7 @@ const listCount = async (interaction) => {
     } catch (error) {
         console.log(error);
         await interaction.reply(
-            `Error listing your active counts. Join the support server for help: https://discord.gg/bDwKqSreue.`
+            `Error listing your active counts. Join the support server for help:\nhttps://discord.gg/bDwKqSreue.`
           );
     }
 }

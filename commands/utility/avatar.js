@@ -35,7 +35,7 @@ module.exports = {
     } catch (error) {
       console.log(error);
       await interaction.reply(
-        `Error getting avatar. Join the support server for help: https://discord.gg/bDwKqSreue.`
+        `Error getting user avatar.\nhttps://discord.gg/bDwKqSreue.`
       );
     }
   },

@@ -21,7 +21,7 @@ const resetCount = async (interaction) => {
     } catch (error) {
         console.log(error);
         await interaction.reply(
-            `Error resetting count. Join the support server for help: https://discord.gg/bDwKqSreue.`
+            `Error resetting count.\nhttps://discord.gg/bDwKqSreue.`
           );
     }
 }
