@@ -8,8 +8,6 @@ const { showCount } = require("./count/show.js");
 const { resetCount } = require("./count/reset.js");
 const { displayCount } = require("./count/display.js");
 
-
-
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("count")
@@ -66,9 +64,7 @@ module.exports = {
         )
     )
     .addSubcommand((subcommand) =>
-      subcommand
-        .setName("display")
-        .setDescription("Display the current count")
+      subcommand.setName("display").setDescription("Display the current count")
     ),
 
   async execute(interaction) {
@@ -90,7 +86,7 @@ module.exports = {
       case "add":
         addCount(interaction);
         break;
-      
+
       case "remove":
         removeCount(interaction);
         break;

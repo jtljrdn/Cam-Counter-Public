@@ -18,17 +18,17 @@ client.once(Events.ClientReady, async (c) => {
   const updateCountChannel = async () => {
     try {
       await connectToDatabase();
-      const servers = await Server.find({countChannel: {$ne: null}});
+      const servers = await Server.find({ countChannel: { $ne: null } });
       for (const server of servers) {
         const guild = await client.guilds.fetch(server.guildId);
         const channel = guild.channels.cache.get(server.countChannel);
         const count = await Count.findById(server.currentCount);
-        channel.setName(`${count.name}: ${count.value}`)
+        channel.setName(`${count.name}: ${count.value}`);
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
   setInterval(async () => {
     await updateCountChannel();
   }, 1000 * 60 * 5);

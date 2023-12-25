@@ -39,7 +39,10 @@ const displayCount = async (interaction) => {
         },
         {
           id: process.env.CLIENT_ID,
-          allow: [PermissionFlagsBits.ManageChannels, PermissionFlagsBits.Connect],
+          allow: [
+            PermissionFlagsBits.ManageChannels,
+            PermissionFlagsBits.Connect,
+          ],
         },
       ],
     });
