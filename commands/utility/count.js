@@ -6,7 +6,7 @@ const { addCount } = require("./count/add.js");
 const { removeCount } = require("./count/remove.js");
 const { showCount } = require("./count/show.js");
 const { resetCount } = require("./count/reset.js");
-
+const { displayCount } = require("./count/display.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -62,6 +62,9 @@ module.exports = {
         .addStringOption((option) =>
           option.setName("id").setDescription("Count ID").setRequired(true)
         )
+    )
+    .addSubcommand((subcommand) =>
+      subcommand.setName("display").setDescription("Display the current count")
     ),
 
   async execute(interaction) {
@@ -83,7 +86,7 @@ module.exports = {
       case "add":
         addCount(interaction);
         break;
-      
+
       case "remove":
         removeCount(interaction);
         break;
@@ -94,6 +97,10 @@ module.exports = {
 
       case "reset":
         resetCount(interaction);
+        break;
+
+      case "display":
+        displayCount(interaction);
         break;
 
       default:

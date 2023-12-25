@@ -1,12 +1,10 @@
 const { PermissionsBitField } = require("discord.js");
 const { connectToDatabase } = require("../../../lib/database");
 const Count = require("../../../lib/database/models/count.model");
-const Server = require("../../../lib/database/models/servers.model")
-
+const Server = require("../../../lib/database/models/servers.model");
 
 const setCount = async (interaction) => {
-
-try {
+  try {
     const member = await interaction.guild.members.fetch(interaction.user.id);
     if (!member.permissions.has(PermissionsBitField.Flags.Administrator)) {
       await interaction.reply(
@@ -20,9 +18,12 @@ try {
       await interaction.reply(
         `Count with ID \`${interaction.options.getString("id")}\` not found!`
       );
-        return;
+      return;
     }
-    const updateCountInServer = await Server.findOneAndUpdate({guildId: interaction.guild.id}, {currentCount: interaction.options.getString("id") });
+    const updateCountInServer = await Server.findOneAndUpdate(
+      { guildId: interaction.guild.id },
+      { currentCount: interaction.options.getString("id") }
+    );
     await interaction.reply(
       `Setting count to ${interaction.options.getString("id")}`
     );
@@ -37,5 +38,5 @@ try {
       `Error setting count in database.\nhttps://discord.gg/bDwKqSreue.`
     );
   }
-}
-  module.exports = { setCount }
+};
+module.exports = { setCount };
