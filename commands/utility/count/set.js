@@ -34,7 +34,7 @@ try {
   } catch (error) {
     console.log(error);
     await interaction.reply(
-      `Error setting count in database. Contact <@119662538781753344> for help.`
+      `Error setting count in database. Join the support server for help: https://discord.gg/bDwKqSreue.`
     );
   }
 }

@@ -30,7 +30,7 @@ module.exports = {
     } catch (error) {
       console.log(error);
       await interaction.reply(
-        `Error getting help pages. Contact <@119662538781753344> for help.`
+        `Error getting help pages. Join the support server for help: https://discord.gg/bDwKqSreue.`
       );
     }
   },

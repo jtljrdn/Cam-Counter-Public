@@ -13,7 +13,7 @@ const removeCount = async (interaction) => {
     } catch (error) {
         console.log(error);
         await interaction.reply(
-            `Error listing your active counts. Contact <@119662538781753344> for help.`
+            `Error removing from the count. Join the support server for help: https://discord.gg/bDwKqSreue.`
           );
     }
 }
