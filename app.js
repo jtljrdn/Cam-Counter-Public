@@ -25,14 +25,13 @@ client.once(Events.ClientReady, async (c) => {
         const count = await Count.findById(server.currentCount);
         channel.setName(`${count.name}: ${count.value}`)
       }
-
     } catch (error) {
       console.log(error);
     }
   }
   setInterval(async () => {
     await updateCountChannel();
-  }, 1000 * 5);
+  }, 1000 * 60 * 5);
 });
 
 const checkConnection = async () => {
