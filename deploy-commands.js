@@ -2,6 +2,7 @@ function deploy() {
   const { REST, Routes } = require("discord.js");
   const fs = require("node:fs");
   const path = require("node:path");
+  const axios = require("axios").default
   require("dotenv").config();
 
   const commands = [];
@@ -43,6 +44,10 @@ function deploy() {
       const data = await rest.put(
         Routes.applicationCommands(process.env.CLIENT_ID),
         { body: commands }
+      );
+      const {data: response} = await axios.post(`https://discordbotlist.com/api/v1/bots/1186507379173503137/commands`, commands, {headers: {Authorization: `Bot ${process.env.DBL_TOKEN}`}})
+      console.log(
+        `${Date.now()} | Successfully sent ${data.length} application (/) commands to Discord Bot List.`
       );
 
       console.log(

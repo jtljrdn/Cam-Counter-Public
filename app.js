@@ -5,8 +5,8 @@ const {
   Collection,
   Events,
   GatewayIntentBits,
-  ActivityType,
 } = require("discord.js");
+const { createDjsClient } = require("discordbotlist")
 const deploy = require("./deploy-commands");
 const Server = require("./lib/database/models/servers.model");
 const { connectToDatabase } = require("./lib/database");
@@ -18,6 +18,8 @@ require("dotenv").config();
 client.once(Events.ClientReady, async (c) => {
   client.user.setActivity("/help");
   console.log(`${Date.now()} | Logged in as ${c.user.tag}!`);
+  const dbl = createDjsClient(process.env.DBL_TOKEN, client);
+  dbl.startPosting();
 });
 
 const checkConnection = async () => {
