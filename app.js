@@ -85,7 +85,7 @@ client.on(Events.GuildCreate, async (guild) => {
 
 client.on(Events.InteractionCreate, (interaction) => {
   if (!interaction.isChatInputCommand()) return;
-  console.log(`${Date.now()} | ${interaction.user.tag} in ${interaction.guild.name} triggered ${interaction.commandName}.`);
+  console.log(`${Date.now()} | ${interaction.user.tag} in ${!interaction.guild ? "DMs" : interaction.guild.name} triggered ${interaction.commandName}.`);
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
