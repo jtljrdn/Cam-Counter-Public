@@ -12,6 +12,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName("count")
     .setDescription("Count Commands")
+    .setDMPermission(false)
     .addSubcommand((subcommand) =>
       subcommand
         .setName("create")
