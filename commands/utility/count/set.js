@@ -1,7 +1,8 @@
 const { PermissionsBitField } = require("discord.js");
 const { connectToDatabase } = require("../../../lib/database");
 const Count = require("../../../lib/database/models/count.model");
-const Server = require("../../../lib/database/models/servers.model")
+const Server = require("../../../lib/database/models/servers.model");
+const { logErrors } = require("../../../logging");
 
 
 const setCount = async (interaction) => {
@@ -32,6 +33,7 @@ try {
       }`
     );
   } catch (error) {
+    logErrors(interaction, error);
     console.log(error);
     await interaction.reply(
       `Error setting count in database.\nhttps://discord.gg/bDwKqSreue.`

@@ -9,6 +9,7 @@ const showCount = async (interaction) => {
         const findCount = await Count.findById(findCountForServer.currentCount);
         await interaction.reply(`The current count for ${interaction.guild.name} is ${findCount.value}!`);
     } catch (error) {
+        logErrors(interaction, error);
         console.log(error);
         await interaction.reply(
             `Error showing your active counts.\nhttps://discord.gg/bDwKqSreue.`

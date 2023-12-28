@@ -1,17 +1,13 @@
 const fs = require("node:fs");
 const path = require("node:path");
-const {
-  Client,
-  Collection,
-  Events,
-  GatewayIntentBits,
-} = require("discord.js");
-const { createDjsClient } = require("discordbotlist")
+const { Client, Collection, Events, GatewayIntentBits, EmbedBuilder } = require("discord.js");
+const { createDjsClient } = require("discordbotlist");
 const deploy = require("./deploy-commands");
 const Server = require("./lib/database/models/servers.model");
 const { connectToDatabase } = require("./lib/database");
+const Count = require("./lib/database/models/count.model");
+const { logCommands, logEvents } = require("./logging");
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
-let currentPage = 0;
 deploy();
 require("dotenv").config();
 
@@ -20,14 +16,44 @@ client.once(Events.ClientReady, async (c) => {
   console.log(`${Date.now()} | Logged in as ${c.user.tag}!`);
   const dbl = createDjsClient(process.env.DBL_TOKEN, client);
   dbl.startPosting();
+  const loggingChannel = client.channels.cache.get(process.env.BOT_LOGGING_CHANNEL);
+  const embed = new EmbedBuilder()
+    .setTitle("🤖 Bot Started")
+    .setColor("White")
+    .setImage(client.user.displayAvatarURL())
+    .setTimestamp(Date.now());
+  loggingChannel.send({ embeds: [embed] });
+  const updateCountChannel = async () => {
+    try {
+      await connectToDatabase();
+      const servers = await Server.find({ countChannel: { $ne: null } });
+      for (const server of servers) {
+        const guild = await client.guilds.fetch(server.guildId);
+        const channel = guild.channels.cache.get(server.countChannel);
+        const count = await Count.findById(server.currentCount);
+        channel.setName(`${count.name}: ${count.value}`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  setInterval(async () => {
+    await updateCountChannel();
+  }, 1000 * 60 * 5);
+  logCommands(client);
+  logEvents(client);
 });
 
 const checkConnection = async () => {
   try {
     await connectToDatabase();
-    console.log(`${Date.now()} | Connection has been established successfully.`);
+    console.log(
+      `${Date.now()} | Connection has been established successfully.`
+    );
   } catch (error) {
-    console.error(`${Date.now()} | Unable to connect to the database: ${error}`);
+    console.error(
+      `${Date.now()} | Unable to connect to the database: ${error}`
+    );
   }
 };
 
@@ -69,14 +95,19 @@ client.on(Events.GuildCreate, async (guild) => {
     if (await Server.findOne({ guildId: guild.id })) {
       console.log(`${Date.now()} | Guild ${guild.id} already exists in DB!`);
     } else {
-      console.log(`${Date.now()} | New Guild Joined: ${guild.id}. Adding to DB...`);
+      console.log(
+        `${Date.now()} | New Guild Joined: ${guild.id}. Adding to DB...`
+      );
       const newGuild = await Server.create({
         guildId: guild.id,
         guildName: guild.name,
       });
       console.log(JSON.parse(JSON.stringify(newGuild)));
     }
-    const channel = client.channels.cache.get(guild.systemChannelId);
+
+    const channel = client.channels.cache.get(guild.systemChannelId)
+      ? client.channels.cache.get(guild.systemChannelId)
+      : guild.channels.cache.find((channel) => channel.name === "general");
     channel.send(
       "Hi! I'm CamBot, a multipurpose bot for your server! To get started, type `/help` to see a list of commands.\nJoin the support server at https://discord.gg/bDwKqSreue for help or to suggest new features!"
     );
@@ -87,7 +118,11 @@ client.on(Events.GuildCreate, async (guild) => {
 
 client.on(Events.InteractionCreate, (interaction) => {
   if (!interaction.isChatInputCommand()) return;
-  console.log(`${Date.now()} | ${interaction.user.tag} in ${!interaction.guild ? "DMs" : interaction.guild.name} triggered ${interaction.commandName}.`);
+  console.log(
+    `${Date.now()} | ${interaction.user.tag} in ${
+      !interaction.guild ? "DMs" : interaction.guild.name
+    } triggered ${interaction.commandName}.`
+  );
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
@@ -96,7 +131,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
     if (!command) {
       console.error(
-        `${Date.now()} | No command matching ${interaction.commandName} was found.`
+        `${Date.now()} | No command matching ${
+          interaction.commandName
+        } was found.`
       );
       return;
     }

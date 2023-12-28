@@ -11,6 +11,7 @@ const removeCount = async (interaction) => {
         const updatedCount = await Count.updateOne({_id: findServer.currentCount}, {value: findCount.value - interaction.options.getInteger("amount")});
         await interaction.reply(`Count ${findCount.name} decreased by ${interaction.options.getInteger("amount")}!`);
     } catch (error) {
+        logErrors(interaction, error);
         console.log(error);
         await interaction.reply(
             `Error removing from the counts. Join the support server for help:\nhttps://discord.gg/bDwKqSreue.`

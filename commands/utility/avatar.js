@@ -33,6 +33,7 @@ module.exports = {
         await interaction.reply({ embeds: [avatarEmbed] });
       }
     } catch (error) {
+      
       console.log(error);
       await interaction.reply(
         `Error getting user avatar.\nhttps://discord.gg/bDwKqSreue.`
