@@ -45,11 +45,7 @@ npm start
 
 ## TODO
 
-* ~~Change DB system to MongoDB~~
-* ~~Add multiple count support via ID setting~~
-* ~~Add commands to set the current count ID (Allowing for multiple counts)~~
-* Passwords on counts? (Or some other way to make server-specific)
-* Change real-time count preview from the status to a locked voice-channel.
+Full list of features being worked on/are planned on [Notion](https://free-taxi-ddb.notion.site/f450769bfce24afbaf41d8e5d2a46bc3?v=4dcc716be5b44f05aa3f512a9dd29130&pvs=4)
 
 ## Contributions
 

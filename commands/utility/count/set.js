@@ -4,7 +4,6 @@ const Count = require("../../../lib/database/models/count.model");
 const Server = require("../../../lib/database/models/servers.model");
 const { logErrors } = require("../../../logging");
 
-
 const setCount = async (interaction) => {
   try {
     const member = await interaction.guild.members.fetch(interaction.user.id);

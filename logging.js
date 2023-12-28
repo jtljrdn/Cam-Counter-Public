@@ -18,9 +18,7 @@ const logCommands = async (client) => {
         .setTitle("🤖 Command Triggered")
         .setColor("Aqua")
         .setDescription(
-          `${interaction.user.tag} in ${isDms} triggered ${
-            interaction.commandName
-          } ${subcommand}.`
+          `${interaction.user.tag} in ${isDms} triggered ${interaction.commandName} ${subcommand}.`
         )
         .setTimestamp(Date.now());
       loggingChannel.send({ embeds: [embed] });

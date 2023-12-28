@@ -1,6 +1,12 @@
 const fs = require("node:fs");
 const path = require("node:path");
-const { Client, Collection, Events, GatewayIntentBits, EmbedBuilder } = require("discord.js");
+const {
+  Client,
+  Collection,
+  Events,
+  GatewayIntentBits,
+  EmbedBuilder,
+} = require("discord.js");
 const { createDjsClient } = require("discordbotlist");
 const deploy = require("./deploy-commands");
 const Server = require("./lib/database/models/servers.model");
@@ -16,7 +22,9 @@ client.once(Events.ClientReady, async (c) => {
   console.log(`${Date.now()} | Logged in as ${c.user.tag}!`);
   const dbl = createDjsClient(process.env.DBL_TOKEN, client);
   dbl.startPosting();
-  const loggingChannel = client.channels.cache.get(process.env.BOT_LOGGING_CHANNEL);
+  const loggingChannel = client.channels.cache.get(
+    process.env.BOT_LOGGING_CHANNEL
+  );
   const embed = new EmbedBuilder()
     .setTitle("🤖 Bot Started")
     .setColor("White")
