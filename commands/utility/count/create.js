@@ -1,4 +1,3 @@
-
 const { connectToDatabase } = require("../../../lib/database");
 const Count = require("../../../lib/database/models/count.model");
 

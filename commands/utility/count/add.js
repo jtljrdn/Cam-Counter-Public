@@ -2,7 +2,6 @@ const { connectToDatabase } = require("../../../lib/database");
 const Count = require("../../../lib/database/models/count.model");
 const Server = require("../../../lib/database/models/servers.model");
 
-
 const addCount = async (interaction) => {
     try {
         await connectToDatabase();
@@ -18,5 +17,3 @@ const addCount = async (interaction) => {
           );
     }
 }
-
-module.exports = { addCount }

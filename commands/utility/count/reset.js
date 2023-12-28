@@ -2,7 +2,10 @@ const { connectToDatabase } = require("../../../lib/database");
 const Count = require("../../../lib/database/models/count.model");
 const Server = require("../../../lib/database/models/servers.model");
 
+
 const resetCount = async (interaction) => {
+  try {
+    const member = await interaction.guild.members.fetch(interaction.user.id);
   try {
     const member = await interaction.guild.members.fetch(interaction.user.id);
 

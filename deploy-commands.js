@@ -2,7 +2,7 @@ function deploy() {
   const { REST, Routes } = require("discord.js");
   const fs = require("node:fs");
   const path = require("node:path");
-  const axios = require("axios").default
+  const axios = require("axios").default;
   require("dotenv").config();
 
   const commands = [];
@@ -37,7 +37,9 @@ function deploy() {
   (async () => {
     try {
       console.log(
-        `${Date.now()} | Started refreshing ${commands.length} application (/) commands.`
+        `${Date.now()} | Started refreshing ${
+          commands.length
+        } application (/) commands.`
       );
 
       // The put method is used to fully refresh all commands in the guild with the current set
@@ -45,13 +47,21 @@ function deploy() {
         Routes.applicationCommands(process.env.CLIENT_ID),
         { body: commands }
       );
-      const {data: response} = await axios.post(`https://discordbotlist.com/api/v1/bots/1186507379173503137/commands`, commands, {headers: {Authorization: `Bot ${process.env.DBL_TOKEN}`}})
+      const { data: response } = await axios.post(
+        `https://discordbotlist.com/api/v1/bots/1186507379173503137/commands`,
+        commands,
+        { headers: { Authorization: `Bot ${process.env.DBL_TOKEN}` } }
+      );
       console.log(
-        `${Date.now()} | Successfully sent ${data.length} application (/) commands to Discord Bot List.`
+        `${Date.now()} | Successfully sent ${
+          data.length
+        } application (/) commands to Discord Bot List.`
       );
 
       console.log(
-        `${Date.now()} | Successfully reloaded ${data.length} application (/) commands.`
+        `${Date.now()} | Successfully reloaded ${
+          data.length
+        } application (/) commands.`
       );
     } catch (error) {
       // And of course, make sure you catch and log any errors!

@@ -101,6 +101,7 @@ client.on(Events.GuildCreate, async (guild) => {
       const newGuild = await Server.create({
         guildId: guild.id,
         guildName: guild.name,
+        joinedAt: Date.now(),
       });
       console.log(JSON.parse(JSON.stringify(newGuild)));
     }
