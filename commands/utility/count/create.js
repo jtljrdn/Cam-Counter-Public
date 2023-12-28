@@ -1,5 +1,6 @@
 const { connectToDatabase } = require("../../../lib/database");
 const Count = require("../../../lib/database/models/count.model");
+const { logErrors } = require("../../../logging");
 
 const createCount = async (interaction) => {
     try {

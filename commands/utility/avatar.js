@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { logErrors } = require("../../logging");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -33,7 +34,7 @@ module.exports = {
         await interaction.reply({ embeds: [avatarEmbed] });
       }
     } catch (error) {
-      
+      logErrors(interaction, error);
       console.log(error);
       await interaction.reply(
         `Error getting user avatar.\nhttps://discord.gg/bDwKqSreue.`

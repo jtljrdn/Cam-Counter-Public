@@ -29,7 +29,7 @@ module.exports = {
           await interaction.reply({ embeds: [pages[0]] });
       }
     } catch (error) {
-      logErrors(error);
+      logErrors(interaction, error);
       console.log(error);
       await interaction.reply(
         `Error getting help pages. Join the support server for help:\nhttps://discord.gg/bDwKqSreue.`
