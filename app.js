@@ -13,7 +13,7 @@ const Server = require("./lib/database/models/servers.model");
 const { connectToDatabase } = require("./lib/database");
 const Count = require("./lib/database/models/count.model");
 const { logCommands, logEvents } = require("./logging");
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers] });
 deploy();
 require("dotenv").config();
 
@@ -151,17 +151,17 @@ client.on(Events.InteractionCreate, async (interaction) => {
       await command.execute(interaction);
     } catch (error) {
       console.error(error);
-      if (interaction.replied || interaction.deferred) {
-        await interaction.followUp({
-          content: "There was an error while executing this command!",
-          ephemeral: true,
-        });
-      } else {
-        await interaction.reply({
-          content: "There was an error while executing this command!",
-          ephemeral: true,
-        });
-      }
+      // if (interaction.replied || interaction.deferred) {
+      //   await interaction.followUp({
+      //     content: "There was an error while executing this command!",
+      //     ephemeral: true,
+      //   });
+      // } else {
+      //   await interaction.reply({
+      //     content: "There was an error while executing this command!",
+      //     ephemeral: true,
+      //   });
+      // }
     }
   } else if (interaction.isButton()) {
     console.log(interaction);
