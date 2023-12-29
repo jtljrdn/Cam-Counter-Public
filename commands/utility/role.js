@@ -34,7 +34,15 @@ module.exports = {
     .addSubcommand((subcommand) =>
       subcommand
         .setName("list")
-        .setDescription("Lists users in the role")
+        .setDescription("Lists users in a role")
+        .addRoleOption((option) =>
+          option.setName("role").setDescription("Role").setRequired(true)
+        )
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName("info")
+        .setDescription("Shows info on a role")
         .addRoleOption((option) =>
           option.setName("role").setDescription("Role").setRequired(true)
         )
@@ -43,7 +51,9 @@ module.exports = {
   async execute(interaction) {
     try {
       const subcommand = await interaction.options.getSubcommand();
-
+      const targetUser = await interaction.guild.members.fetch(
+        interaction.options.getUser("user")
+      );
       const member = await interaction.guild.members.fetch(interaction.user.id);
       const role = await interaction.options.getRole("role");
       if (!member.permissions.has(PermissionsBitField.Flags.ManageRoles)) {
@@ -52,28 +62,46 @@ module.exports = {
         );
         return;
       }
-      if (subcommand === "add") {
-        const targetUser = await interaction.guild.members.fetch(
-          interaction.options.getUser("user")
-        );
-        await interaction.reply(`Adding ${role} to ${targetUser}`);
-        await targetUser.roles.add(role.id);
-      } else if (subcommand === "remove") {
-        const targetUser = await interaction.guild.members.fetch(
-          interaction.options.getUser("user")
-        );
-        await interaction.reply(`Removing ${role} from ${targetUser}`);
-        await targetUser.roles.remove(role.id);
-      } else if (subcommand === "list") {
-        await interaction.guild.members.fetch();
-        const members = await role.members
-          .map((member) => `<@${member.user.id}>`)
-          .join("\n");
-        const embed = new EmbedBuilder()
-          .setColor(role.color)
-          .setTitle(`Users in ${role.name}`)
-          .setDescription(`${members}`);
-        await interaction.reply({ embeds: [embed] });
+
+      switch (subcommand) {
+        case "add":
+          await interaction.reply(`Adding ${role} to ${targetUser}`);
+          await targetUser.roles.add(role.id);
+          break;
+          case "remove":
+            await interaction.reply(`Removing ${role} from ${targetUser}`);
+            await targetUser.roles.remove(role.id);
+          break;
+          case "list":
+            await interaction.guild.members.fetch();
+            const members = await role.members
+              .map((member) => `<@${member.user.id}>`)
+              .join("\n");
+            const listEmbed = new EmbedBuilder()
+              .setColor(role.color)
+              .setTitle(`Users in ${role.name}`)
+              .setDescription(`${members}`);
+            await interaction.reply({ embeds: [listEmbed] });
+          break;
+          case "info":
+            await interaction.guild.members.fetch();
+            const infoEmbed = new EmbedBuilder()
+            .setColor(role.color)
+            .setTitle(`${role.name}`)
+            .setDescription(`ID: ${role.id}`)
+            .setThumbnail(`https://www.colorhexa.com/${role.hexColor.slice(1)}.png`)
+            .addFields(
+              { name: "Color", value: `${role.hexColor}` },
+              { name: "Mentionable", value: `${role.mentionable}` },
+              { name: "Hoisted", value: `${role.hoist}` },
+              { name: "Position", value: `${role.position}` },
+              { name: "Members", value: `${role.members.size}` }
+            );
+          await interaction.reply({ embeds: [infoEmbed] });
+          break;
+      
+        default:
+          break;
       }
     } catch (error) {
       if (error.message === "Missing Permissions") {
