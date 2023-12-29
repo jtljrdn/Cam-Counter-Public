@@ -18,7 +18,7 @@ deploy();
 require("dotenv").config();
 
 client.once(Events.ClientReady, async (c) => {
-  client.user.setActivity("/help");
+  client.user.setActivity("NEW: Added /role. /help");
   console.log(`${Date.now()} | Logged in as ${c.user.tag}!`);
   const dbl = createDjsClient(process.env.DBL_TOKEN, client);
   dbl.startPosting();
