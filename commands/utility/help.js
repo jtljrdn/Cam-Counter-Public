@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
 const { pages } = require("../../lib/help");
 const { logErrors } = require("../../logging");
 
@@ -9,7 +9,7 @@ module.exports = {
     .addStringOption((option) =>
       option
         .setName("page")
-        .setDescription("Page Number (1-2)")
+        .setDescription("Page Number (1-3 )")
         .setRequired(false)
     ),
   async execute(interaction) {
@@ -22,9 +22,9 @@ module.exports = {
         case "2":
           await interaction.reply({ embeds: [pages[1]] });
           break;
-        // case "3":
-        //   await interaction.reply({ embeds: [pages[2]] });
-        //   break;
+        case "3":
+          await interaction.reply({ embeds: [pages[2]] });
+          break;
         default:
           await interaction.reply({ embeds: [pages[0]] });
       }

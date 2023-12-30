@@ -13,12 +13,13 @@ const Server = require("./lib/database/models/servers.model");
 const { connectToDatabase } = require("./lib/database");
 const Count = require("./lib/database/models/count.model");
 const { logCommands, logEvents } = require("./logging");
+const updateStatus = require("./lib/status/status");
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers] });
 deploy();
 require("dotenv").config();
 
 client.once(Events.ClientReady, async (c) => {
-  client.user.setActivity("NEW: Added /role. /help");
+  updateStatus(c)
   console.log(`${Date.now()} | Logged in as ${c.user.tag}!`);
   const dbl = createDjsClient(process.env.DBL_TOKEN, client);
   dbl.startPosting();

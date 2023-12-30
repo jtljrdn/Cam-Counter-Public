@@ -64,4 +64,18 @@ const logErrors = async (interaction, error) => {
   loggingChannel.send({ embeds: [embed] });
 };
 
-module.exports = { logCommands, logEvents, logErrors };
+const logBugs = async (interaction, bug) => {
+  const loggingChannel = interaction.client.channels.cache.get(logsChannel);
+  const reportEmbed = new EmbedBuilder()
+  .setTitle("🤖 Bug Reported")
+  .setColor("Red")
+  .addFields(
+    { name: "Bug ID", value: `${bug._id}` },
+    { name: "Description", value: `${bug.description}` },
+    { name: "Submitted By", value: `<@${bug.submittedBy}>` },
+    { name: "Submitted At", value: `${bug.createdAt}` }
+  );
+  await loggingChannel.send({ embeds: [reportEmbed] });
+};
+
+module.exports = { logCommands, logEvents, logErrors, logBugs };
