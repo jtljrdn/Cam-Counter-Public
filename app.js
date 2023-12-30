@@ -14,12 +14,14 @@ const { connectToDatabase } = require("./lib/database");
 const Count = require("./lib/database/models/count.model");
 const { logCommands, logEvents } = require("./logging");
 const updateStatus = require("./lib/status/status");
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers] });
+const client = new Client({
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
+});
 deploy();
 require("dotenv").config();
 
 client.once(Events.ClientReady, async (c) => {
-  updateStatus(c)
+  updateStatus(c);
   console.log(`${Date.now()} | Logged in as ${c.user.tag}!`);
   const dbl = createDjsClient(process.env.DBL_TOKEN, client);
   dbl.startPosting();
@@ -122,8 +124,14 @@ client.on(Events.GuildCreate, async (guild) => {
       "Hi! I'm CamBot, a multipurpose bot for your server! To get started, type `/help` to see a list of commands.\nJoin the support server at https://discord.gg/bDwKqSreue for help or to suggest new features!"
     );
   } catch (error) {
+    if (error.message === "Missing Permissions") {
+      console.log(`${Date.now()} | Missing permissions to greet new guild.`);
+    }
     console.log(error);
   }
+  process.on("uncaughtException", (err) => {
+    console.log(err);
+  })
 });
 
 client.on(Events.InteractionCreate, (interaction) => {
