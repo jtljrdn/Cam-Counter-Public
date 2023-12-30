@@ -104,7 +104,7 @@ module.exports = {
           break;
       }
     } catch (error) {
-      if (error.message === "Missing Permissions") {
+      if (error.message === "Missing Permissions" || error.message === "Missing Access") {
         const embed = new EmbedBuilder()
           .setTitle("🤖 Error")
           .setColor("Red")
