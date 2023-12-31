@@ -1,3 +1,4 @@
+
 function deploy() {
   const { REST, Routes } = require("discord.js");
   const fs = require("node:fs");
@@ -47,11 +48,12 @@ function deploy() {
         Routes.applicationCommands(process.env.CLIENT_ID),
         { body: commands }
       );
-      const { data: response } = await axios.post(
+      const { data: dblResponse } = await axios.post(
         `https://discordbotlist.com/api/v1/bots/1186507379173503137/commands`,
         commands,
         { headers: { Authorization: `Bot ${process.env.DBL_TOKEN}` } }
       );
+
       console.log(
         `${Date.now()} | Successfully sent ${
           data.length

@@ -14,14 +14,24 @@ const { connectToDatabase } = require("./lib/database");
 const Count = require("./lib/database/models/count.model");
 const { logCommands, logEvents } = require("./logging");
 const updateStatus = require("./lib/status/status");
+const axios = require("axios").default;
 const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
 });
 deploy();
 require("dotenv").config();
-
 client.once(Events.ClientReady, async (c) => {
   updateStatus(c);
+  const { data: topggResponse } = await axios
+    .post(
+      `https://top.gg/api/bots/1186507379173503137/stats`,
+      { server_count: c.guilds.cache.size },
+      { headers: { Authorization: process.env.TOPGG_TOKEN } }
+    )
+    .then(
+      console.log(`${Date.now()} | Successfully sent server count to Top.gg!`)
+    )
+    .catch(console.error);
   console.log(`${Date.now()} | Logged in as ${c.user.tag}!`);
   const dbl = createDjsClient(process.env.DBL_TOKEN, client);
   dbl.startPosting();
@@ -131,7 +141,7 @@ client.on(Events.GuildCreate, async (guild) => {
   }
   process.on("uncaughtException", (err) => {
     console.log(err);
-  })
+  });
 });
 
 client.on(Events.InteractionCreate, (interaction) => {
