@@ -9,7 +9,7 @@ module.exports = {
     .setName("fn")
     .setDescription("Fortnite Related Commands")
     .addSubcommand((subcommand) =>
-      subcommand.setName("itemshop").setDescription("Get Fortnite Stats")
+      subcommand.setName("itemshop").setDescription("Get Fortnite Item Shop")
     )
     .addSubcommand((subcommand) =>
       subcommand
