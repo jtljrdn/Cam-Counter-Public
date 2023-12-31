@@ -68,28 +68,30 @@ module.exports = {
           await interaction.reply(`Adding ${role} to ${targetUser}`);
           await targetUser.roles.add(role.id);
           break;
-          case "remove":
-            await interaction.reply(`Removing ${role} from ${targetUser}`);
-            await targetUser.roles.remove(role.id);
+        case "remove":
+          await interaction.reply(`Removing ${role} from ${targetUser}`);
+          await targetUser.roles.remove(role.id);
           break;
-          case "list":
-            await interaction.guild.members.fetch();
-            const members = await role.members
-              .map((member) => `<@${member.user.id}>`)
-              .join("\n");
-            const listEmbed = new EmbedBuilder()
-              .setColor(role.color)
-              .setTitle(`Users in ${role.name}`)
-              .setDescription(`${members}`);
-            await interaction.reply({ embeds: [listEmbed] });
+        case "list":
+          await interaction.guild.members.fetch();
+          const members = await role.members
+            .map((member) => `<@${member.user.id}>`)
+            .join("\n");
+          const listEmbed = new EmbedBuilder()
+            .setColor(role.color)
+            .setTitle(`Users in ${role.name}`)
+            .setDescription(`${members}`);
+          await interaction.reply({ embeds: [listEmbed] });
           break;
-          case "info":
-            await interaction.guild.members.fetch();
-            const infoEmbed = new EmbedBuilder()
+        case "info":
+          await interaction.guild.members.fetch();
+          const infoEmbed = new EmbedBuilder()
             .setColor(role.color)
             .setTitle(`${role.name}`)
             .setDescription(`ID: ${role.id}`)
-            .setThumbnail(`https://www.colorhexa.com/${role.hexColor.slice(1)}.png`)
+            .setThumbnail(
+              `https://www.colorhexa.com/${role.hexColor.slice(1)}.png`
+            )
             .addFields(
               { name: "Color", value: `${role.hexColor}` },
               { name: "Mentionable", value: `${role.mentionable}` },
@@ -99,12 +101,15 @@ module.exports = {
             );
           await interaction.reply({ embeds: [infoEmbed] });
           break;
-      
+
         default:
           break;
       }
     } catch (error) {
-      if (error.message === "Missing Permissions" || error.message === "Missing Access") {
+      if (
+        error.message === "Missing Permissions" ||
+        error.message === "Missing Access"
+      ) {
         const embed = new EmbedBuilder()
           .setTitle("🤖 Error")
           .setColor("Red")
