@@ -36,7 +36,7 @@ module.exports = {
           const itemShopEmbed = new EmbedBuilder()
             .setTitle(`Today's Item Shop | ${itemShopFeatured.length} Items`)
             .setColor("Red")
-            .setFooter("Powered by fnbr.co")
+            .setFooter({text: "Powered by fnbr.co"})
             .setTimestamp();
           const cosmetics = itemShopFeatured
             .map(
