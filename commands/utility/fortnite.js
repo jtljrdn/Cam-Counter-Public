@@ -3,7 +3,6 @@ const { logErrors } = require("../../logging");
 const { default: axios } = require("axios");
 const { upperCaseFirst } = require("../../lib/upperCaseFirst");
 
-
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("fn")
@@ -36,49 +35,67 @@ module.exports = {
           const itemShopEmbed = new EmbedBuilder()
             .setTitle(`Today's Item Shop | ${itemShopFeatured.length} Items`)
             .setColor("Red")
-            .setFooter({text: "Powered by fnbr.co"})
+            .setFooter({ text: "Powered by fnbr.co" })
             .setTimestamp();
           const cosmetics = itemShopFeatured
             .map(
               (item) =>
-                `**${item.name}** | ${item.price} V-Bucks | ${upperCaseFirst(item.rarity)}`
+                `**${item.name}** | ${item.price} V-Bucks | ${upperCaseFirst(
+                  item.rarity
+                )}`
             )
             .join("\n");
           itemShopEmbed.setDescription(cosmetics);
-          await interaction.editReply({content: "", embeds: [itemShopEmbed] });
+          await interaction.editReply({ content: "", embeds: [itemShopEmbed] });
           break;
 
         case "search":
-            await interaction.reply("Searching Fortnite Cosmetic...");
-            const cosmeticName = interaction.options.getString("name");
-            const cosmetic = await axios.get(`https://fnbr.co/api/images?search=${cosmeticName}`, {
-                headers: { "x-api-key": process.env.FNBR_API_KEY },
-            });
-            if (cosmetic.data.data.length === 0) {
-                await interaction.editReply(`No cosmetics found for ${cosmeticName}. Check your spelling and try again.`);
-                return;
+          await interaction.reply("Searching Fortnite Cosmetic...");
+          const cosmeticName = interaction.options.getString("name");
+          const cosmetic = await axios.get(
+            `https://fnbr.co/api/images?search=${cosmeticName}`,
+            {
+              headers: { "x-api-key": process.env.FNBR_API_KEY },
             }
-            const cosmeticEmbed = new EmbedBuilder()
-                .setTitle(`${cosmetic.data.data[0].name}`)
-                .setColor("Blue")
-                .setDescription(`${cosmetic.data.data[0].description}`)
-                .addFields({
-                    name: "Price",
-                    value: `${cosmetic.data.data[0].price} V-Bucks`,
-                })
-                .addFields({
-                    name: "Rarity",
-                    value: `${upperCaseFirst(cosmetic.data.data[0].rarity)}`,
-                })
-                .addFields({
-                    name: "Type",
-                    value: `${upperCaseFirst(cosmetic.data.data[0].type)}`,
-                })
-                .setImage(cosmetic.data.data[0].images.png ? cosmetic.data.data[0].images.png : cosmetic.data.data[0].images.icon)
-                .setURL(`https://fnbr.co/${cosmetic.data.data[0].type}/${cosmetic.data.data[0].slug}`)
-                .setFooter({text: "Powered by fnbr.co"})
-                .setTimestamp();
-            await interaction.editReply({content: "", embeds: [cosmeticEmbed] });
+          );
+          if (cosmetic.data.data.length === 0) {
+            await interaction.editReply(
+              `No cosmetics found for ${cosmeticName}. Check your spelling and try again.`
+            );
+            return;
+          }
+
+          const cosmeticEmbed = new EmbedBuilder()
+            .setTitle(`${cosmetic.data.data[0].name}`)
+            .setColor("Blue")
+            .setDescription(`${cosmetic.data.data[0].description}`)
+            .addFields({
+              name: "Price",
+              value: `${cosmetic.data.data[0].price}`,
+            })
+            .addFields({
+              name: "Rarity",
+              value: `${upperCaseFirst(cosmetic.data.data[0].rarity)}`,
+            })
+            .addFields({
+              name: "Type",
+              value: `${upperCaseFirst(cosmetic.data.data[0].type)}`,
+            })
+            .addFields({
+              name: "Last Seen",
+              value: `${cosmetic.data.data[0].history.lastSeen}`,
+            })
+            .setImage(
+              cosmetic.data.data[0].images.featured
+                ? cosmetic.data.data[0].images.featured
+                : cosmetic.data.data[0].images.icon
+            )
+            .setURL(
+              `https://fnbr.co/${cosmetic.data.data[0].type}/${cosmetic.data.data[0].slug}`
+            )
+            .setFooter({ text: "Powered by fnbr.co" })
+            .setTimestamp();
+          await interaction.editReply({ content: "", embeds: [cosmeticEmbed] });
           break;
         default:
           await interaction.reply(`https://fnbr.co/shop`);
