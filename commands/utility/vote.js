@@ -6,7 +6,6 @@ module.exports = {
     .setName("vote")
     .setDescription("Vote for CamBot"),
   async execute(interaction) {
-    // interaction.guild is the object representing the Guild in which the command was run
     try {
       const embed = new EmbedBuilder()
         .setTitle("Vote!")
@@ -21,9 +20,9 @@ module.exports = {
           },
           {
             name: "Want to support the bot in other ways?",
-            value: "**Buy me a [Ko-fi](https://ko-fi.com/bungbloopity)** to support the bot's development!\nJoin the support server! [Discord](https://discord.gg/bDwKqSreue)",
+            value:
+              "**Buy me a [Ko-fi](https://ko-fi.com/bungbloopity)** to support the bot's development!\nJoin the support server! [Discord](https://discord.gg/bDwKqSreue)",
           }
-
         )
         .setTimestamp();
 
