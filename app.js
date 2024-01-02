@@ -131,8 +131,9 @@ client.on(Events.GuildCreate, async (guild) => {
       ? client.channels.cache.get(guild.systemChannelId)
       : guild.channels.cache.find((channel) => channel.name === "general");
     channel.send(
-      "Hi! I'm CamBot, a multipurpose bot for your server! To get started, type `/help` to see a list of commands.\nJoin the support server at https://discord.gg/bDwKqSreue for help or to suggest new features!"
+      "Hi! I'm CamBot, a multipurpose bot for your server! Thanks for adding me! To get started, use </help:1187536665598775318> to see a list of commands.\nJoin the support server at https://discord.gg/bDwKqSreue for help or to suggest new features!\n\nIf you enjoy this bot, please consider voting for us on [Top.gg](https://top.gg/bot/1186507379173503137) and [DiscordBotList](https://discordbotlist.com/bots/cambot/upvote)!\nIf you'd like to support the development of this bot, consider donating at https://www.ko-fi.com/bungbloopity."
     );
+    console.log(`${Date.now()} | Greeted new guild.`);
   } catch (error) {
     if (error.message === "Missing Permissions") {
       console.log(`${Date.now()} | Missing permissions to greet new guild.`);
