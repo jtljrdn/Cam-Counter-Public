@@ -42,6 +42,11 @@ module.exports = {
             )
             .setRequired(true)
         )
+    )
+    .addSubcommand((subcommand) =>
+        subcommand
+            .setName("map")
+            .setDescription("Shows the current Fortnite Map")
     ),
   async execute(interaction) {
     try {
@@ -206,6 +211,12 @@ module.exports = {
         await interaction.editReply(
           `User does not exist. Check your spelling and try again.`
         );
+        return;
+      }
+      if (error.response.status == 403) {
+        await interaction.editReply(
+            `User's profile is private. Cannot retrieve data.`
+        )
         return;
       }
       logErrors(interaction, error);
