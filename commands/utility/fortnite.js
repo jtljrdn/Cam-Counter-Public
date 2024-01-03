@@ -195,7 +195,6 @@ module.exports = {
             .setFooter({ text: "Powered by fortnite-api.com" })
             .setTimestamp();
           await interaction.editReply({ content: "", embeds: [statsEmbed] });
-          console.log(stats.data.data.stats.all.overall);
           break;
 
         case "map":
