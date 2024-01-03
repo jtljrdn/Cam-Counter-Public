@@ -20,6 +20,28 @@ module.exports = {
             .setDescription("Cosmetic Name")
             .setRequired(true)
         )
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName("stats")
+        .setDescription("Shows a Players Fortnite Stats")
+        .addStringOption((option) =>
+          option
+            .setName("name")
+            .setDescription("Epic Games Username")
+            .setRequired(true)
+        )
+        .addStringOption((option) =>
+          option
+            .setName("platform")
+            .setDescription("Platform (Epic, PSN, XBL)")
+            .addChoices(
+              { name: "Epic", value: "epic" },
+              { name: "PSN", value: "psn" },
+              { name: "XBL", value: "xbl" }
+            )
+            .setRequired(true)
+        )
     ),
   async execute(interaction) {
     try {
@@ -97,13 +119,98 @@ module.exports = {
             .setTimestamp();
           await interaction.editReply({ content: "", embeds: [cosmeticEmbed] });
           break;
+
+        case "stats":
+          await interaction.reply("Getting Fortnite Stats...");
+          const username = interaction.options.getString("name");
+          const platform = interaction.options.getString("platform");
+          let stats;
+          let platformImage;
+          if (platform === "epic") {
+            stats = await axios.get(
+              `https://fortnite-api.com/v2/stats/br/v2?name=${username}&image=all`,
+              {
+                headers: { Authorization: process.env.FNAPI_KEY },
+              }
+            );
+            platformImage =
+              "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Epic_Games_logo.svg/882px-Epic_Games_logo.svg.png";
+          } else if (platform === "psn") {
+            stats = await axios.get(
+              `https://fortnite-api.com/v2/stats/br/v2?name=${username}&accountType=psn&image=all`,
+              {
+                headers: { Authorization: process.env.FNAPI_KEY },
+              }
+            );
+            platformImage =
+              "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/PlayStation_logo.svg/2560px-PlayStation_logo.svg.png";
+          } else if (platform === "xbl") {
+            stats = await axios.get(
+              `https://fortnite-api.com/v2/stats/br/v2?name=${username}&accountType=xbl&image=all`,
+              {
+                headers: { Authorization: process.env.FNAPI_KEY },
+              }
+            );
+            platformImage =
+              "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Xbox_one_logo.svg/2048px-Xbox_one_logo.svg.png";
+          }
+          if (stats.data.status == 404) {
+            await interaction.editReply(
+              `${username} does not exist. Check your spelling and try again.`
+            );
+            return;
+          }
+          const statsEmbed = new EmbedBuilder()
+            .setTitle(`${stats.data.data.account.name}`)
+            .setDescription(
+              `Fortnite Stats for ${
+                stats.data.data.account.name
+              } | ${upperCaseFirst(platform)}`
+            )
+            .setColor("Blue")
+            .setThumbnail(platformImage)
+            .addFields(
+              {
+                name: "Season Level",
+                value: `BP Level ${stats.data.data.battlePass.level}`,
+              },
+              {
+                name: "Overall",
+                value: `Wins ${stats.data.data.stats.all.overall.wins} | Win Rate ${stats.data.data.stats.all.overall.winRate} | Kills ${stats.data.data.stats.all.overall.kills} `,
+              },
+              {
+                name: "Solo",
+                value: `Wins ${stats.data.data.stats.all.solo.wins} | Win Rate ${stats.data.data.stats.all.solo.winRate} | Kills ${stats.data.data.stats.all.solo.kills} `,
+              },
+              {
+                name: "Duo",
+                value: `Wins ${stats.data.data.stats.all.duo.wins} | Win Rate ${stats.data.data.stats.all.duo.winRate} | Kills ${stats.data.data.stats.all.duo.kills} `,
+              },
+              {
+                name: "Squad",
+                value: `Wins ${stats.data.data.stats.all.squad.wins} | Win Rate ${stats.data.data.stats.all.squad.winRate} | Kills ${stats.data.data.stats.all.squad.kills} `,
+              }
+            )
+            .setImage(stats.data.data.image)
+            .setFooter({ text: "Powered by fortnite-api.com" })
+            .setTimestamp();
+          await interaction.editReply({ content: "", embeds: [statsEmbed] });
+          console.log(stats.data.data.stats.all.overall);
+          break;
+
         default:
           await interaction.reply(`https://fnbr.co/shop`);
       }
     } catch (error) {
+      if (error.response.status == 404) {
+        await interaction.editReply(
+          `User does not exist. Check your spelling and try again.`
+        );
+        return;
+      }
       logErrors(interaction, error);
       console.log(error);
-      await interaction.reply(
+      await interaction.editReply(
         `Error using Fortnite commands. Join the support server for help:\nhttps://discord.gg/bDwKqSreue.`
       );
     }
