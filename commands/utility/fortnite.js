@@ -28,7 +28,7 @@ module.exports = {
         .addStringOption((option) =>
           option
             .setName("name")
-            .setDescription("Epic Games Username")
+            .setDescription("Username")
             .setRequired(true)
         )
         .addStringOption((option) =>
@@ -44,9 +44,7 @@ module.exports = {
         )
     )
     .addSubcommand((subcommand) =>
-        subcommand
-            .setName("map")
-            .setDescription("Shows the current Fortnite Map")
+      subcommand.setName("map").setDescription("Shows the current Fortnite Map")
     ),
   async execute(interaction) {
     try {
@@ -203,6 +201,18 @@ module.exports = {
           console.log(stats.data.data.stats.all.overall);
           break;
 
+        case "map":
+          await interaction.reply("Getting Fortnite Map...");
+          const mapData = await axios.get(`https://fortnite-api.com/v1/map`);
+          const mapEmbed = new EmbedBuilder()
+            .setTitle(`Fortnite Map`)
+            .setThumbnail("Click to view full map")
+            .setImage(mapData.data.data.images.pois)
+            .setTimestamp()
+            .setFooter({ text: "Powered by fortnite-api.com" });
+          await interaction.editReply({ content: "", embeds: [mapEmbed] });
+          break;
+
         default:
           await interaction.reply(`https://fnbr.co/shop`);
       }
@@ -215,8 +225,8 @@ module.exports = {
       }
       if (error.response.status == 403) {
         await interaction.editReply(
-            `User's profile is private. Cannot retrieve data.`
-        )
+          `User's profile is private. Cannot retrieve data.`
+        );
         return;
       }
       logErrors(interaction, error);
