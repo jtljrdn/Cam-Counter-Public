@@ -26,10 +26,7 @@ module.exports = {
         .setName("stats")
         .setDescription("Shows a Players Fortnite Stats")
         .addStringOption((option) =>
-          option
-            .setName("name")
-            .setDescription("Username")
-            .setRequired(true)
+          option.setName("name").setDescription("Username").setRequired(true)
         )
         .addStringOption((option) =>
           option
@@ -206,7 +203,7 @@ module.exports = {
           const mapData = await axios.get(`https://fortnite-api.com/v1/map`);
           const mapEmbed = new EmbedBuilder()
             .setTitle(`Fortnite Map`)
-            .setThumbnail("Click to view full map")
+            .setDescription("Click to view full map")
             .setImage(mapData.data.data.images.pois)
             .setTimestamp()
             .setFooter({ text: "Powered by fortnite-api.com" });
@@ -222,18 +219,18 @@ module.exports = {
           `User does not exist. Check your spelling and try again.`
         );
         return;
-      }
-      if (error.response.status == 403) {
+      } else if (error.response.status == 403) {
         await interaction.editReply(
           `User's profile is private. Cannot retrieve data.`
         );
         return;
+      } else {
+        logErrors(interaction, error);
+        console.log(error);
+        await interaction.editReply(
+          `Error using Fortnite commands. Join the support server for help:\nhttps://discord.gg/bDwKqSreue.`
+        );
       }
-      logErrors(interaction, error);
-      console.log(error);
-      await interaction.editReply(
-        `Error using Fortnite commands. Join the support server for help:\nhttps://discord.gg/bDwKqSreue.`
-      );
     }
   },
 };
