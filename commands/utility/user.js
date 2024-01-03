@@ -14,7 +14,7 @@ module.exports = {
       const createdAt = new Date(interaction.options.getUser("user").createdAt.getTime())
       const userEmbed = new EmbedBuilder()
         .setTitle(`${interaction.user.username} Info`)
-        .setImage(guildUser.user.displayAvatarURL())
+        .setThumbnail(guildUser.user.displayAvatarURL())
         .setColor("Random")
         .addFields(
           {

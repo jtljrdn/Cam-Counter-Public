@@ -141,7 +141,7 @@ client.on(Events.GuildCreate, async (guild) => {
     console.log(error);
   }
   process.on("uncaughtException", (err) => {
-    console.log(err);
+    console.log(`${Date.now()} | Missing permissions to greet new guild.`);
   });
 });
 
