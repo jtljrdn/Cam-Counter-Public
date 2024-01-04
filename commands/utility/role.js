@@ -46,6 +46,37 @@ module.exports = {
         .addRoleOption((option) =>
           option.setName("role").setDescription("Role").setRequired(true)
         )
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName("create")
+        .setDescription("Creates a role")
+        .addStringOption((option) =>
+          option.setName("name").setDescription("Role Name").setRequired(true)
+        )
+        .addStringOption((option) =>
+          option.setName("color").setDescription("Hex Color Code")
+        )
+        .addBooleanOption((option) =>
+          option.setName("mentionable").setDescription("Mentionable Role")
+        )
+        .addBooleanOption((option) =>
+          option.setName("hoist").setDescription("Hoist Role")
+        )
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName("color")
+        .setDescription("Changes a role's color")
+        .addRoleOption((option) =>
+          option.setName("role").setDescription("Role").setRequired(true)
+        )
+        .addStringOption((option) =>
+          option
+            .setName("hex")
+            .setDescription("Hex Color Code")
+            .setRequired(true)
+        )
     ),
 
   async execute(interaction) {
@@ -65,11 +96,11 @@ module.exports = {
 
       switch (subcommand) {
         case "add":
-          await interaction.reply(`Adding ${role} to ${targetUser}`);
+          await interaction.reply(`Added ${role} to ${targetUser}`);
           await targetUser.roles.add(role.id);
           break;
         case "remove":
-          await interaction.reply(`Removing ${role} from ${targetUser}`);
+          await interaction.reply(`Removed ${role} from ${targetUser}`);
           await targetUser.roles.remove(role.id);
           break;
         case "list":
@@ -93,13 +124,70 @@ module.exports = {
               `https://www.colorhexa.com/${role.hexColor.slice(1)}.png`
             )
             .addFields(
-              { name: "Color", value: `${role.hexColor}` },
-              { name: "Mentionable", value: `${role.mentionable}` },
-              { name: "Hoisted", value: `${role.hoist}` },
-              { name: "Position", value: `${role.position}` },
-              { name: "Members", value: `${role.members.size}` }
+              { name: "Color", value: `${role.hexColor}`, inline: true },
+              {
+                name: "Mentionable",
+                value: `${role.mentionable}`,
+                inline: true,
+              },
+              { name: "Hoisted", value: `${role.hoist}`, inline: true },
+              { name: "Position", value: `${role.position}`, inline: true },
+              { name: "Members", value: `${role.members.size}`, inline: true }
             );
           await interaction.reply({ embeds: [infoEmbed] });
+          break;
+        case "create":
+          await interaction.reply("Creating role...");
+          const name = await interaction.options.getString("name");
+          const color =
+            (await interaction.options.getString("color")) ?? "Default";
+          const mentionable =
+            (await interaction.options.getBoolean("mentionable")) ?? false;
+          const hoist =
+            (await interaction.options.getBoolean("hoist")) ?? false;
+
+          const newRole = await interaction.guild.roles.create({
+            name: name,
+            color: color,
+            mentionable: mentionable,
+            hoist: hoist,
+          });
+          const roleEmbed = new EmbedBuilder()
+            .setColor(newRole.color)
+            .setTitle(`Sucessfully created new role ${newRole.name}!`)
+            .setDescription(`ID: ${newRole.id}`)
+            .setThumbnail(
+              `https://www.colorhexa.com/${newRole.hexColor.slice(1)}.png`
+            )
+            .addFields(
+              { name: "Color", value: `${newRole.hexColor}`, inline: true },
+              {
+                name: "Mentionable",
+                value: `${newRole.mentionable}`,
+                inline: true,
+              },
+              { name: "Hoisted", value: `${newRole.hoist}`, inline: true }
+            )
+            .setTimestamp();
+          await interaction.editReply({ content: "", embeds: [roleEmbed] });
+          break;
+        case "color":
+          await interaction.reply("Changing role color...");
+          const hex = await interaction.options.getString("hex");
+          await role.setColor(hex);
+          const colorEmbed = new EmbedBuilder()
+            .setColor(role.color)
+            .setTitle(`Sucessfully changed ${role.name}'s color!`)
+            .setDescription(`ID: ${role.id}`)
+            .setThumbnail(
+              `https://www.colorhexa.com/${role.hexColor.slice(1)}.png`
+            )
+            .addFields(
+              { name: "Role", value: `${role}`, inline: true },
+              { name: "Color", value: `${role.hexColor}`, inline: true }
+            )
+            .setTimestamp();
+          await interaction.editReply({ content: "", embeds: [colorEmbed] });
           break;
 
         default:
@@ -115,6 +203,17 @@ module.exports = {
           .setColor("Red")
           .setDescription(
             `CamBot does not have permission to use this command.\nPlease make sure CamBot has the **Manage Roles** permission and the role you are trying to change is below CamBot's highest role.`
+          )
+          .setTimestamp(Date.now());
+        await interaction.editReply({ content: "", embeds: [embed] });
+        return;
+      }
+      if (error.message === "Unable to convert color to a number.") {
+        const embed = new EmbedBuilder()
+          .setTitle("🤖 Error")
+          .setColor("Red")
+          .setDescription(
+            `Invalid color code. Please use a hex color code. (i.e. #ff0000))`
           )
           .setTimestamp(Date.now());
         await interaction.editReply({ content: "", embeds: [embed] });
