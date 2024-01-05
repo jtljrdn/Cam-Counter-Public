@@ -21,48 +21,53 @@ const client = new Client({
 deploy();
 require("dotenv").config();
 client.once(Events.ClientReady, async (c) => {
-  updateStatus(c);
-  const { data: topggResponse } = await axios
-    .post(
-      `https://top.gg/api/bots/1186507379173503137/stats`,
-      { server_count: c.guilds.cache.size },
-      { headers: { Authorization: process.env.TOPGG_TOKEN } }
-    )
-    .then(
-      console.log(`${Date.now()} | Successfully sent server count to Top.gg!`)
-    )
-    .catch(console.error);
-  console.log(`${Date.now()} | Logged in as ${c.user.tag}!`);
-  const dbl = createDjsClient(process.env.DBL_TOKEN, client);
-  dbl.startPosting();
-  const loggingChannel = client.channels.cache.get(
-    process.env.BOT_LOGGING_CHANNEL
-  );
-  const embed = new EmbedBuilder()
-    .setTitle("🤖 Bot Started")
-    .setColor("White")
-    .setImage(client.user.displayAvatarURL())
-    .setTimestamp(Date.now());
-  loggingChannel.send({ embeds: [embed] });
-  const updateCountChannel = async () => {
-    try {
-      await connectToDatabase();
-      const servers = await Server.find({ countChannel: { $ne: null } });
-      for (const server of servers) {
-        const guild = await client.guilds.fetch(server.guildId);
-        const channel = guild.channels.cache.get(server.countChannel);
-        const count = await Count.findById(server.currentCount);
-        channel.setName(`${count.name}: ${count.value}`);
+  try {
+    updateStatus(c);
+    const { data: topggResponse } = await axios
+      .post(
+        `https://top.gg/api/bots/1186507379173503137/stats`,
+        { server_count: c.guilds.cache.size },
+        { headers: { Authorization: process.env.TOPGG_TOKEN } }
+      )
+      .then(
+        console.log(`${Date.now()} | Successfully sent server count to Top.gg!`)
+      )
+      .catch(console.error);
+    console.log(`${Date.now()} | Logged in as ${c.user.tag}!`);
+    const dbl = createDjsClient(process.env.DBL_TOKEN, client);
+    dbl.startPosting();
+    const loggingChannel = client.channels.cache.get(
+      process.env.BOT_LOGGING_CHANNEL
+    );
+    const embed = new EmbedBuilder()
+      .setTitle("🤖 Bot Started")
+      .setColor("White")
+      .setImage(client.user.displayAvatarURL())
+      .setTimestamp(Date.now());
+    loggingChannel.send({ embeds: [embed] });
+    const updateCountChannel = async () => {
+      try {
+        await connectToDatabase();
+        const servers = await Server.find({ countChannel: { $ne: null } });
+        for (const server of servers) {
+          const guild = await client.guilds.fetch(server.guildId);
+          const channel = guild.channels.cache.get(server.countChannel);
+          const count = await Count.findById(server.currentCount);
+          channel.setName(`${count.name}: ${count.value}`);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  setInterval(async () => {
-    await updateCountChannel();
-  }, 1000 * 60 * 5);
-  logCommands(client);
-  logEvents(client);
+    };
+    setInterval(async () => {
+      await updateCountChannel();
+    }, 1000 * 60 * 5);
+    logCommands(client);
+    logEvents(client);
+  } catch (error) {
+    console.log(error);
+    console.log("Error starting bot.");
+  }
 });
 
 const checkConnection = async () => {
