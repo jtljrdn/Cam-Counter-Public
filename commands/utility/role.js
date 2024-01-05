@@ -31,17 +31,17 @@ module.exports = {
     //       option.setName("bots").setDescription("Include Bots. Default: False")
     //     )
     // )
-  //   .addSubcommand((subcommand) =>
-  //   subcommand
-  //     .setName("removeall")
-  //     .setDescription("Remove all users from a role")
-  //     .addRoleOption((option) =>
-  //       option.setName("role").setDescription("Role").setRequired(true)
-  //     )
-  //     .addBooleanOption((option) =>
-  //       option.setName("bots").setDescription("Include Bots. Default: False")
-  //     )
-  // )
+    //   .addSubcommand((subcommand) =>
+    //   subcommand
+    //     .setName("removeall")
+    //     .setDescription("Remove all users from a role")
+    //     .addRoleOption((option) =>
+    //       option.setName("role").setDescription("Role").setRequired(true)
+    //     )
+    //     .addBooleanOption((option) =>
+    //       option.setName("bots").setDescription("Include Bots. Default: False")
+    //     )
+    // )
     .addSubcommand((subcommand) =>
       subcommand
         .setName("remove")
@@ -104,10 +104,8 @@ module.exports = {
   async execute(interaction) {
     try {
       const subcommand = await interaction.options.getSubcommand();
-      const targetUser = await interaction.guild.members.fetch(
-        interaction.options.getUser("user")
-      );
-      const member = await interaction.guild.members.fetch(interaction.user.id);
+      const targetUser = interaction.options.getMember("user");
+      const member = await interaction.member;
       const role = await interaction.options.getRole("role");
       if (!member.permissions.has(PermissionsBitField.Flags.ManageRoles)) {
         await interaction.reply(
@@ -200,7 +198,7 @@ module.exports = {
                 inline: true,
               },
               { name: "Hoisted", value: `${role.hoist}`, inline: true },
-              { name: "Position", value: `${role.position}`, inline: true },
+              { name: "Position", value: `${role.position}`, inline: true }
             );
           await interaction.reply({ embeds: [infoEmbed] });
           break;
