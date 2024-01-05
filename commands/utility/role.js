@@ -202,7 +202,6 @@ module.exports = {
               },
               { name: "Hoisted", value: `${role.hoist}`, inline: true },
               { name: "Position", value: `${role.position}`, inline: true },
-              { name: "Members", value: `${role.members.size}`, inline: true }
             );
           await interaction.reply({ embeds: [infoEmbed] });
           break;
