@@ -20,28 +20,28 @@ module.exports = {
           option.setName("role").setDescription("Role").setRequired(true)
         )
     )
-    .addSubcommand((subcommand) =>
-      subcommand
-        .setName("addall")
-        .setDescription("Add all users to role")
-        .addRoleOption((option) =>
-          option.setName("role").setDescription("Role").setRequired(true)
-        )
-        .addBooleanOption((option) =>
-          option.setName("bots").setDescription("Include Bots. Default: False")
-        )
-    )
-    .addSubcommand((subcommand) =>
-    subcommand
-      .setName("removeall")
-      .setDescription("Remove all users from a role")
-      .addRoleOption((option) =>
-        option.setName("role").setDescription("Role").setRequired(true)
-      )
-      .addBooleanOption((option) =>
-        option.setName("bots").setDescription("Include Bots. Default: False")
-      )
-  )
+    // .addSubcommand((subcommand) =>
+    //   subcommand
+    //     .setName("addall")
+    //     .setDescription("Add all users to role")
+    //     .addRoleOption((option) =>
+    //       option.setName("role").setDescription("Role").setRequired(true)
+    //     )
+    //     .addBooleanOption((option) =>
+    //       option.setName("bots").setDescription("Include Bots. Default: False")
+    //     )
+    // )
+  //   .addSubcommand((subcommand) =>
+  //   subcommand
+  //     .setName("removeall")
+  //     .setDescription("Remove all users from a role")
+  //     .addRoleOption((option) =>
+  //       option.setName("role").setDescription("Role").setRequired(true)
+  //     )
+  //     .addBooleanOption((option) =>
+  //       option.setName("bots").setDescription("Include Bots. Default: False")
+  //     )
+  // )
     .addSubcommand((subcommand) =>
       subcommand
         .setName("remove")
@@ -53,14 +53,14 @@ module.exports = {
           option.setName("role").setDescription("Role").setRequired(true)
         )
     )
-    .addSubcommand((subcommand) =>
-      subcommand
-        .setName("list")
-        .setDescription("Lists users in a role")
-        .addRoleOption((option) =>
-          option.setName("role").setDescription("Role").setRequired(true)
-        )
-    )
+    // .addSubcommand((subcommand) =>
+    //   subcommand
+    //     .setName("list")
+    //     .setDescription("Lists users in a role")
+    //     .addRoleOption((option) =>
+    //       option.setName("role").setDescription("Role").setRequired(true)
+    //     )
+    // )
     .addSubcommand((subcommand) =>
       subcommand
         .setName("info")
@@ -121,71 +121,70 @@ module.exports = {
           await interaction.reply(`Added ${role} to ${targetUser}`);
           await targetUser.roles.add(role.id);
           break;
-        case "addall":
-          await interaction.reply(`Adding all users to ${role}`);
-          const addBots = (await interaction.options.getBoolean("bots")) ?? false;
-          await interaction.guild.members.fetch();
-          if (addBots == true) {
-            const membersToAdd = await interaction.guild.members.cache
-            await membersToAdd.forEach(async (member) => {
-              await member.roles.add(role.id);
-            });
-            await interaction.editReply(
-              `Added ${membersToAdd.size} users to ${role}`
-            );
-          } else {
-            const membersToAdd = await interaction.guild.members.cache.filter(
-              (member) => member.user.bot === false
-            );
-            await membersToAdd.forEach(async (member) => {
-              await member.roles.add(role.id);
-            });
-            await interaction.editReply(
-              `Added ${membersToAdd.size} users to ${role}`
-            );
-          }
-          break;
+        // case "addall":
+        //   await interaction.reply(`Adding all users to ${role}`);
+        //   const addBots = (await interaction.options.getBoolean("bots")) ?? false;
+        //   await interaction.guild.members.fetch();
+        //   if (addBots == true) {
+        //     const membersToAdd = await interaction.guild.members.cache
+        //     await membersToAdd.forEach(async (member) => {
+        //       await member.roles.add(role.id);
+        //     });
+        //     await interaction.editReply(
+        //       `Added ${membersToAdd.size} users to ${role}`
+        //     );
+        //   } else {
+        //     const membersToAdd = await interaction.guild.members.cache.filter(
+        //       (member) => member.user.bot === false
+        //     );
+        //     await membersToAdd.forEach(async (member) => {
+        //       await member.roles.add(role.id);
+        //     });
+        //     await interaction.editReply(
+        //       `Added ${membersToAdd.size} users to ${role}`
+        //     );
+        //   }
+        //   break;
         case "remove":
           await interaction.reply(`Removed ${role} from ${targetUser}`);
           await targetUser.roles.remove(role.id);
           break;
-          case "removeall":
-          await interaction.reply(`Removing all users from ${role}`);
-          const removeBots = (await interaction.options.getBoolean("bots")) ?? false;
-          await interaction.guild.members.fetch();
-          if (removeBots == true) {
-            const membersToRemove = await interaction.guild.members.cache
-            await membersToRemove.forEach(async (member) => {
-              await member.roles.remove(role.id);
-            });
-            await interaction.editReply(
-              `Removed ${membersToRemove.size} users from ${role}`
-            );
-          } else {
-            const membersToRemove = await interaction.guild.members.cache.filter(
-              (member) => member.user.bot === false
-            );
-            await membersToRemove.forEach(async (member) => {
-              await member.roles.remove(role.id);
-            });
-            await interaction.editReply(
-              `Removed ${membersToRemove.size} users from ${role}`
-            );
-          }
-        break;
-        case "list":
-          await interaction.guild.members.fetch();
-          const members = await role.members
-            .map((member) => `<@${member.user.id}>`)
-            .join("\n");
-          const listEmbed = new EmbedBuilder()
-            .setColor(role.color)
-            .setTitle(`Users in ${role.name}`)
-            .setDescription(`${members}`);
-          await interaction.reply({ embeds: [listEmbed] });
-          break;
+        //   case "removeall":
+        //   await interaction.reply(`Removing all users from ${role}`);
+        //   const removeBots = (await interaction.options.getBoolean("bots")) ?? false;
+        //   await interaction.guild.members.fetch();
+        //   if (removeBots == true) {
+        //     const membersToRemove = await interaction.guild.members.cache
+        //     await membersToRemove.forEach(async (member) => {
+        //       await member.roles.remove(role.id);
+        //     });
+        //     await interaction.editReply(
+        //       `Removed ${membersToRemove.size} users from ${role}`
+        //     );
+        //   } else {
+        //     const membersToRemove = await interaction.guild.members.cache.filter(
+        //       (member) => member.user.bot === false
+        //     );
+        //     await membersToRemove.forEach(async (member) => {
+        //       await member.roles.remove(role.id);
+        //     });
+        //     await interaction.editReply(
+        //       `Removed ${membersToRemove.size} users from ${role}`
+        //     );
+        //   }
+        // break;
+        // case "list":
+        //   await interaction.guild.members.fetch();
+        //   const members = await role.members
+        //     .map((member) => `<@${member.user.id}>`)
+        //     .join("\n");
+        //   const listEmbed = new EmbedBuilder()
+        //     .setColor(role.color)
+        //     .setTitle(`Users in ${role.name}`)
+        //     .setDescription(`${members}`);
+        //   await interaction.reply({ embeds: [listEmbed] });
+        //   break;
         case "info":
-          await interaction.guild.members.fetch();
           const infoEmbed = new EmbedBuilder()
             .setColor(role.color)
             .setTitle(`${role.name}`)
