@@ -16,7 +16,7 @@ const { logCommands, logEvents } = require("./logging");
 const updateStatus = require("./lib/status/status");
 const axios = require("axios").default;
 const client = new Client({
-  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
+  intents: [GatewayIntentBits.Guilds],
 });
 deploy();
 require("dotenv").config();
