@@ -124,7 +124,7 @@ module.exports = {
               ).toFixed(0)}>`,
               inline: true,
             })
-            .setThumbnail(
+            .setImage(
               cosmetic.data.data[0].images.featured
                 ? cosmetic.data.data[0].images.featured
                 : cosmetic.data.data[0].images.icon
