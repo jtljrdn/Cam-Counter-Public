@@ -252,6 +252,7 @@ module.exports = {
             .setTitle(`${jamtrack.title}`)
             .setDescription(`${jamtrack.artist}`)
             .setThumbnail(jamtrack.albumArt)
+            .setColor("Blue")
             .addFields(
               {
                 name: "Release Year",
