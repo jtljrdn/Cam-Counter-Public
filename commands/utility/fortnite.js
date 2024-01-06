@@ -105,20 +105,24 @@ module.exports = {
             .addFields({
               name: "Price",
               value: `${cosmetic.data.data[0].price}`,
+              inline: true,
             })
             .addFields({
               name: "Rarity",
               value: `${upperCaseFirst(cosmetic.data.data[0].rarity)}`,
+              inline: true,
             })
             .addFields({
               name: "Type",
               value: `${upperCaseFirst(cosmetic.data.data[0].type)}`,
+              inline: true,
             })
             .addFields({
               name: "Last Seen",
-              value: `${cosmetic.data.data[0].history.lastSeen}`,
+              value: `<t:${parseInt(Date.parse(cosmetic.data.data[0].history.lastSeen)/1000).toFixed(0)}>`,
+              inline: true,
             })
-            .setImage(
+            .setThumbnail(
               cosmetic.data.data[0].images.featured
                 ? cosmetic.data.data[0].images.featured
                 : cosmetic.data.data[0].images.icon
@@ -171,6 +175,13 @@ module.exports = {
               await interaction.editReply(
                 `${username} does not exist. Check your spelling and try again.`
               );
+              break;
+            }
+            if (error.response.status == 403) {
+              await interaction.editReply(
+                `${username}'s account is not public. Data cannot be retrieved.`
+              );
+              break;
             }
           }
           const statsEmbed = new EmbedBuilder()
@@ -268,7 +279,6 @@ module.exports = {
               }
             )
             .setTimestamp();
-          console.log(jamtrack);
           await interaction.editReply({ content: "", embeds: [jamtrackEmbed] });
           break;
         default:
