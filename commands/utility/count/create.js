@@ -14,7 +14,7 @@ const createCount = async (interaction) => {
     await interaction.reply(
       `Sucessfully created count with name ${interaction.options.getString(
         "name"
-      )} and ID ${newCount._id}!`
+      )} and ID \`${newCount._id}\`!`
     );
     console.log(
       `New Count Created in DB ${interaction.options.getString("name")}`
@@ -24,7 +24,7 @@ const createCount = async (interaction) => {
     logErrors(interaction, error);
     console.log(error);
     await interaction.reply(
-      `Error creating count in database. Join the support server for help:\nhttps://discord.gg/bDwKqSreue.`
+      `Error creating count in database. Use \`/count help\` for help.`
     );
   }
 };

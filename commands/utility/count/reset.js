@@ -25,7 +25,7 @@ const resetCount = async (interaction) => {
     logErrors(interaction, error);
     console.log(error);
     await interaction.reply(
-      `Error resetting count.\nhttps://discord.gg/bDwKqSreue.`
+      `Error resetting count. Use \`/count help\` for help.`
     );
   }
 };

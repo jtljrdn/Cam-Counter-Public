@@ -37,7 +37,7 @@ const setCount = async (interaction) => {
     logErrors(interaction, error);
     console.log(error);
     await interaction.reply(
-      `Error setting count in database.\nhttps://discord.gg/bDwKqSreue.`
+      `Error setting count in database. Use \`/count help\` for help.`
     );
   }
 };

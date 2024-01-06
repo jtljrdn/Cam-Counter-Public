@@ -21,7 +21,7 @@ const removeCount = async (interaction) => {
     logErrors(interaction, error);
     console.log(error);
     await interaction.reply(
-      `Error removing from the counts. Join the support server for help:\nhttps://discord.gg/bDwKqSreue.`
+      `Error removing from the counts. Use \`/count help\` for help.`
     );
   }
 };

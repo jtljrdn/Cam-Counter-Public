@@ -61,7 +61,7 @@ client.once(Events.ClientReady, async (c) => {
     };
     setInterval(async () => {
       await updateCountChannel();
-    }, 1000 * 60 * 5);
+    }, 1000 * 60);
     logCommands(client);
     logEvents(client);
   } catch (error) {

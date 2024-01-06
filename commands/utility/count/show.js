@@ -17,7 +17,7 @@ const showCount = async (interaction) => {
     logErrors(interaction, error);
     console.log(error);
     await interaction.reply(
-      `Error showing your active counts.\nhttps://discord.gg/bDwKqSreue.`
+      `Error showing your active counts. Use \`/count help\` for help.`
     );
   }
 };

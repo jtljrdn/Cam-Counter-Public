@@ -4,20 +4,21 @@ const { logErrors } = require("../../../logging");
 
 const listCount = async (interaction) => {
   try {
+    const user = interaction.options.getUser("user") ?? interaction.user;
     await connectToDatabase();
     const findCounts = await Count.find({
-      creator: interaction.options.getUser("user").id,
+      creator: user.id,
     });
     await interaction.reply(
-      `Here are ${interaction.options.getUser("user")} counts:${findCounts.map(
-        (count) => `\n${count.name} - ${count._id}`
+      `Here are ${user} counts:${findCounts.map(
+        (count) => `\n${count.name} - \`${count._id}\``
       )}`
     );
   } catch (error) {
     logErrors(interaction, error);
     console.log(error);
     await interaction.reply(
-      `Error listing your active counts. Join the support server for help:\nhttps://discord.gg/bDwKqSreue.`
+      `Error listing your active counts. Use \`/count help\` for help.`
     );
   }
 };

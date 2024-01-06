@@ -21,7 +21,7 @@ const addCount = async (interaction) => {
     logErrors(interaction, error);
     console.log(error);
     await interaction.reply(
-      `Error adding to the count. Join the support server for help:\nhttps://discord.gg/bDwKqSreue.`
+      `Error adding to the count. Use \`/count help\` for help.`
     );
   }
 };
