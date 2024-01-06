@@ -43,6 +43,7 @@ module.exports = {
 
   async execute(interaction) {
     try {
+      await interaction.reply("Creating poll...");
       const subcommand = interaction.options.getSubcommand();
       switch (subcommand) {
         case "create":
@@ -81,7 +82,7 @@ module.exports = {
             .setDescription(embedDesc)
             .setTimestamp();
 
-          await interaction.reply({ embeds: [embed] });
+          await interaction.editReply({ embeds: [embed] });
           const pollMessage = await interaction.fetchReply();
           for (let i = 1; i <= numOptions; i++) {
             await pollMessage.react(`${i}\u20e3`);
@@ -91,8 +92,8 @@ module.exports = {
     } catch (error) {
       logErrors(interaction, error);
       console.log(error);
-      interaction.reply(
-        "Error getting user info. Join the support server for help:\nhttps://discord.gg/bDwKqSreue."
+      interaction.editReply(
+        "Error creating poll. Join the support server for help:\nhttps://discord.gg/bDwKqSreue."
       );
     }
   },
