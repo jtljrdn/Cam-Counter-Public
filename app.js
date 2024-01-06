@@ -23,16 +23,16 @@ require("dotenv").config();
 client.once(Events.ClientReady, async (c) => {
   try {
     updateStatus(c);
-    // const { data: topggResponse } = await axios
-    //   .post(
-    //     `https://top.gg/api/bots/1186507379173503137/stats`,
-    //     { server_count: c.guilds.cache.size },
-    //     { headers: { Authorization: process.env.TOPGG_TOKEN } }
-    //   )
-    //   .then(
-    //     console.log(`${Date.now()} | Successfully sent server count to Top.gg!`)
-    //   )
-    //   .catch(console.error);
+    const { data: topggResponse } = await axios
+      .post(
+        `https://top.gg/api/bots/1186507379173503137/stats`,
+        { server_count: c.guilds.cache.size },
+        { headers: { Authorization: process.env.TOPGG_TOKEN } }
+      )
+      .then(
+        console.log(`${Date.now()} | Successfully sent server count to Top.gg!`)
+      )
+      .catch(console.error);
     console.log(`${Date.now()} | Logged in as ${c.user.tag}!`);
     const dbl = createDjsClient(process.env.DBL_TOKEN, client);
     dbl.startPosting();
@@ -176,17 +176,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
       await command.execute(interaction);
     } catch (error) {
       console.error(error);
-      // if (interaction.replied || interaction.deferred) {
-      //   await interaction.followUp({
-      //     content: "There was an error while executing this command!",
-      //     ephemeral: true,
-      //   });
-      // } else {
-      //   await interaction.reply({
-      //     content: "There was an error while executing this command!",
-      //     ephemeral: true,
-      //   });
-      // }
     }
   } else if (interaction.isButton()) {
     console.log(interaction);
