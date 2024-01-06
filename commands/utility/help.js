@@ -9,7 +9,7 @@ module.exports = {
     .addStringOption((option) =>
       option
         .setName("page")
-        .setDescription("Page Number (1-3 )")
+        .setDescription("Page Number (1-4)")
         .setRequired(false)
     ),
   async execute(interaction) {
@@ -24,6 +24,9 @@ module.exports = {
           break;
         case "3":
           await interaction.reply({ embeds: [pages[2]] });
+          break;
+        case "4":
+          await interaction.reply({ embeds: [pages[3]] });
           break;
         default:
           await interaction.reply({ embeds: [pages[0]] });
