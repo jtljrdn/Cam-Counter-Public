@@ -24,20 +24,20 @@ module.exports = {
         .addStringOption((option) =>
           option
             .setName("option2")
-            .setDescription("Option 1 for the poll.")
+            .setDescription("Option 2 for the poll.")
             .setRequired(true)
         )
         .addStringOption((option) =>
-          option.setName("option3").setDescription("Option 1 for the poll.")
+          option.setName("option3").setDescription("Option 3 for the poll.")
         )
         .addStringOption((option) =>
-          option.setName("option4").setDescription("Option 1 for the poll.")
+          option.setName("option4").setDescription("Option 4 for the poll.")
         )
         .addStringOption((option) =>
-          option.setName("option5").setDescription("Option 1 for the poll.")
+          option.setName("option5").setDescription("Option 5 for the poll.")
         )
         .addStringOption((option) =>
-          option.setName("option6").setDescription("Option 1 for the poll.")
+          option.setName("option6").setDescription("Option 6 for the poll.")
         )
     ),
 
