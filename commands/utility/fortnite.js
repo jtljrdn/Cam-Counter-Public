@@ -249,8 +249,8 @@ module.exports = {
               },
               { name: "BPM", value: `${jamtrack.bpm}`, inline: true },
               {
-                name: "Length (seconds)",
-                value: `${jamtrack.duration}`,
+                name: "Length",
+                value: `${jamtrack.duration}s`,
                 inline: true,
               },
               { name: "Genre", value: `${jamtrack.genres}`, inline: true },
