@@ -119,7 +119,9 @@ module.exports = {
             })
             .addFields({
               name: "Last Seen",
-              value: `<t:${parseInt(Date.parse(cosmetic.data.data[0].history.lastSeen)/1000).toFixed(0)}>`,
+              value: `<t:${parseInt(
+                Date.parse(cosmetic.data.data[0].history.lastSeen) / 1000
+              ).toFixed(0)}>`,
               inline: true,
             })
             .setThumbnail(
