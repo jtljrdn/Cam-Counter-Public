@@ -8,7 +8,7 @@ const { logErrors } = require("../../logging");
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("role")
-    .setDescription("Add role to user")
+    .setDescription("Role commands.")
     .addSubcommand((subcommand) =>
       subcommand
         .setName("add")
