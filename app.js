@@ -178,7 +178,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
       console.error(error);
     }
   } else if (interaction.isButton()) {
-    console.log(interaction);
+    
     // respond to the button interaction
   }
   // } else if (interaction.isStringSelectMenu()) {
