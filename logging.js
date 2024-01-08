@@ -33,7 +33,7 @@ const logEvents = async (client) => {
       .setTitle("🤖 Server Joined")
       .setColor("Green")
       .setDescription(`Joined ${guild.name}!`)
-      .addFields({ name: "Member Count", value: `${guild.memberCount}` })
+      .addFields({ name: "ID", value: `${guild.id}`, inline: true }, { name: "Member Count", value: `${guild.memberCount}`, inline: true })
       .setImage(guild.iconURL())
       .setTimestamp(Date.now());
     loggingChannel.send({ embeds: [embed] });
@@ -44,6 +44,7 @@ const logEvents = async (client) => {
       .setTitle("🤖 Server Left")
       .setColor("Yellow")
       .setDescription(`Left ${guild.name}!`)
+      .addFields({ name: "ID", value: `${guild.id}`, inline: true }, { name: "Member Count", value: `${guild.memberCount}`, inline: true })
       .setImage(guild.iconURL())
       .setTimestamp(Date.now());
     loggingChannel.send({ embeds: [embed] });
