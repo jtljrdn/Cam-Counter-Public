@@ -23,16 +23,16 @@ require("dotenv").config();
 client.once(Events.ClientReady, async (c) => {
   try {
     updateStatus(c);
-    // const { data: topggResponse } = await axios
-    //   .post(
-    //     `https://top.gg/api/bots/1186507379173503137/stats`,
-    //     { server_count: c.guilds.cache.size },
-    //     { headers: { Authorization: process.env.TOPGG_TOKEN } }
-    //   )
-    //   .then(
-    //     console.log(`${Date.now()} | Successfully sent server count to Top.gg!`)
-    //   )
-    //   .catch(console.error);
+    const { data: topggResponse } = await axios
+      .post(
+        `https://top.gg/api/bots/1186507379173503137/stats`,
+        { server_count: c.guilds.cache.size },
+        { headers: { Authorization: process.env.TOPGG_TOKEN } }
+      )
+      .then(
+        console.log(`${Date.now()} | Successfully sent server count to Top.gg!`)
+      )
+      .catch(console.error);
     console.log(`${Date.now()} | Logged in as ${c.user.tag}!`);
     const dbl = createDjsClient(process.env.DBL_TOKEN, client);
     dbl.startPosting();
