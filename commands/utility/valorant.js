@@ -124,7 +124,7 @@ module.exports = {
     } catch (error) {
       logErrors(interaction, error);
       console.log(error);
-      await interaction.editReply(`Error`);
+      await interaction.editReply(`There was an error. Join the support server for help:\nhttps://discord.gg/bDwKqSreue.`);
     }
   },
 };
