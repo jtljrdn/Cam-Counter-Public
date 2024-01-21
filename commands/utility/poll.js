@@ -82,7 +82,7 @@ module.exports = {
             .setDescription(embedDesc)
             .setTimestamp();
 
-          await interaction.editReply({ embeds: [embed] });
+          await interaction.editReply({content: "", embeds: [embed] });
           const pollMessage = await interaction.fetchReply();
           for (let i = 1; i <= numOptions; i++) {
             await pollMessage.react(`${i}\u20e3`);
