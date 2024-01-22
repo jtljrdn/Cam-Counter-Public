@@ -14,6 +14,7 @@ const { connectToDatabase } = require("./lib/database");
 const Count = require("./lib/database/models/count.model");
 const { logCommands, logEvents } = require("./logging");
 const updateStatus = require("./lib/status/status");
+const Stats = require("./lib/database/models/stats.modal");
 const axios = require("axios").default;
 const client = new Client({
   intents: [GatewayIntentBits.Guilds],
@@ -59,9 +60,34 @@ client.once(Events.ClientReady, async (c) => {
         console.log(error);
       }
     };
-    setInterval(async () => {
-      await updateCountChannel();
-    }, 1000 * 60);
+    if (process.env.ENVIRONMENT === "production") {
+      setInterval(async () => {
+        await updateCountChannel();
+      }, 1000 * 60);
+      try {
+        setInterval(async () => {
+          await connectToDatabase();
+          const userCount = () => {
+            let count = 0;
+            client.guilds.cache.forEach((guild) => {
+              count += guild.memberCount;
+            });
+            console.log(count);
+            return count;
+          };
+          const stats = await Stats.findByIdAndUpdate(
+            "65ade1c76f113987582b9c29",
+            {
+              guildCount: client.guilds.cache.size,
+              userCount: userCount(),
+            }
+          );
+        }, 1000 * 30);
+      } catch (error) {
+        console.log(error);
+        console.log("Error updating stats.");
+      }
+    }
     logCommands(client);
     logEvents(client);
   } catch (error) {
@@ -178,7 +204,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
       console.error(error);
     }
   } else if (interaction.isButton()) {
-    
     // respond to the button interaction
   }
   // } else if (interaction.isStringSelectMenu()) {
