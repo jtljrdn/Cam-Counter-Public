@@ -82,7 +82,7 @@ client.once(Events.ClientReady, async (c) => {
               userCount: userCount(),
             }
           );
-        }, 1000 * 30);
+        }, 1000 * 60 * 30);
       } catch (error) {
         console.log(error);
         console.log("Error updating stats.");
