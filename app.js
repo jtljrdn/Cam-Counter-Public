@@ -72,7 +72,6 @@ client.once(Events.ClientReady, async (c) => {
             client.guilds.cache.forEach((guild) => {
               count += guild.memberCount;
             });
-            console.log(count);
             return count;
           };
           const stats = await Stats.findByIdAndUpdate(
