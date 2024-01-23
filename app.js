@@ -16,6 +16,8 @@ const { logCommands, logEvents } = require("./logging");
 const updateStatus = require("./lib/status/status");
 const Stats = require("./lib/database/models/stats.modal");
 const axios = require("axios").default;
+const { VoiceConnectionStatus, AudioPlayerStatus } = require('@discordjs/voice');
+
 const client = new Client({
   intents: [GatewayIntentBits.Guilds],
 });
