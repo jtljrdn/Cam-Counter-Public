@@ -108,6 +108,36 @@ const checkConnection = async () => {
   }
 };
 
+const auditGuilds = async () => {
+  try {
+    let count = 0;
+    await connectToDatabase();
+    const servers = await Server.find();
+    const guilds = client.guilds.cache.forEach(async (guild) => {
+      const serverInDb = servers.find((server) => server.guildId === guild.id);
+      if (!serverInDb) {
+        // Add to DB
+        count++;
+        console.log(`${Date.now()} | Guild ${guild.id} does not exist in DB, adding...`)
+        await Server.create({
+          guildId: guild.id,
+          guildName: guild.name || "Unknown",
+          joinedAt: Date.now(),
+        });
+      }
+      if (serverInDb && serverInDb.guildName !== guild.name) {
+        // Update name in DB if name is Unknown or Changed
+        count++;
+        console.log(`${Date.now()} | Guild ${guild.id} name changed, updating...`)
+        await Server.findOneAndUpdate({ guildId: guild.id }, { guildName: guild.name });
+      }
+
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+auditGuilds();
 checkConnection();
 
 client.login(process.env.TOKEN);
@@ -173,6 +203,17 @@ client.on(Events.GuildCreate, async (guild) => {
   process.on("uncaughtException", (err) => {
     console.log(`${Date.now()} | Missing permissions to greet new guild.`);
   });
+});
+
+client.on(Events.GuildDelete, async (guild) => {
+  console.log(`Left ${guild.name}!`);
+  try {
+    await connectToDatabase();
+    await Server.findOneAndDelete({ guildId: guild.id });
+    console.log(`${Date.now()} | Deleted guild ${guild.id} from DB.`);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 client.on(Events.InteractionCreate, (interaction) => {
