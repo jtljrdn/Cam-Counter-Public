@@ -12,31 +12,47 @@ module.exports = {
     try {
       const guildUser = await interaction.guild.members.fetch(interaction.options.getUser("user"));
       const createdAt = new Date(interaction.options.getUser("user").createdAt.getTime())
+      const boosted = guildUser.premiumSinceTimestamp != null ? "✅" : "❌";
       const userEmbed = new EmbedBuilder()
-        .setTitle(`${interaction.user.username} Info`)
+        .setTitle(`${interaction.options.getUser("user").username}'s Info`)
         .setThumbnail(guildUser.user.displayAvatarURL())
         .setColor("Random")
         .addFields(
           {
-            name: "Username",
-            value: interaction.options.getUser("user").username,
-          },
-          {
-            name: "User ID",
+            name: "**❯ User ID**",
             value: interaction.options.getUser("user").id,
+            inline: true,
           },
           {
-            name: "Created At",
+            name: "**❯ Username**",
+            value: interaction.options.getUser("user").username,
+            inline: true,
+          },
+          {
+            name: "**❯ Display Name**",
+            value: guildUser.user.globalName,
+            inline: true,
+          },
+          {
+            name: "**❯ Boosting**",
+            value: `${boosted}`,
+            inline: true,
+          },
+          {
+            name: "**❯ Created At**",
             value: `<t:${parseInt((createdAt.getTime()/1000).toFixed(0))}>`,
+            inline: true,
           },
           {
-            name: "Joined At",
+            name: "**❯ Joined At**",
             value: `<t:${parseInt((guildUser.joinedTimestamp/1000).toFixed(0))}>`,
+            inline: true,
           },
           {
-            name: "Roles",
+            name: "**❯ Roles**",
             value: guildUser.roles.cache.map((role) => `${role}`).join(" | "),
-          }
+            inline: true,
+          },
         )
         .setTimestamp();
       await interaction.reply({ embeds: [userEmbed] });
