@@ -175,6 +175,17 @@ client.on(Events.GuildCreate, async (guild) => {
   });
 });
 
+client.on(Events.GuildDelete, async (guild) => {
+  console.log(`Left ${guild.name}!`);
+  try {
+    await connectToDatabase();
+    await Server.findOneAndDelete({ guildId: guild.id });
+    console.log(`${Date.now()} | Deleted guild ${guild.id} from DB.`);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 client.on(Events.InteractionCreate, (interaction) => {
   if (!interaction.isChatInputCommand()) return;
   console.log(
