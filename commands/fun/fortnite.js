@@ -64,6 +64,10 @@ module.exports = {
             headers: { "x-api-key": process.env.FNBR_API_KEY },
           });
           const itemShopFeatured = itemShop.data.data.featured;
+          if (itemShopFeatured.length >= 100){
+            await interaction.editReply("Item Shop is too large to display. Check the item shop at https://fnbr.co/shop");
+            return;
+          }
 
           const itemShopEmbed = new EmbedBuilder()
             .setTitle(`Today's Item Shop | ${itemShopFeatured.length} Items`)
